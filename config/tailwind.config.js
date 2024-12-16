@@ -14,13 +14,17 @@ module.exports = {
       },
       colors: {
         primary: {
-          DEFAULT: "#673BB7"
+          DEFAULT: "#FF6D2F"
         },
         secondary: {
-          DEFAULT: "#EDE7F6"
+          DEFAULT: "#FFDACD"
         },
         tertiary: {
-          DEFAULT: "#EFF3F6"
+          DEFAULT: "#F8F7F6"
+        },
+        gray: {
+          400: "#9097a7",
+          500: "#242C33"
         }
       }
     },

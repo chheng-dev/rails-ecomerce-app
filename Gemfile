@@ -24,6 +24,8 @@ gem 'react-rails', '~> 2.7'
 
 gem 'font-awesome-sass', '~> 6.2.0'
 
+gem 'jquery-rails'
+
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
@@ -36,6 +38,12 @@ gem 'jbuilder', '~> 2.5'
 # gem 'bcrypt', '~> 3.1.7'
 
 gem "tailwindcss-rails"
+
+gem 'rack-cors'
+
+gem 'cloudinary', '~> 1.10'
+
+gem 'dotenv-rails'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'

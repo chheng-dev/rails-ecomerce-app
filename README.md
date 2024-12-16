@@ -4,3 +4,4 @@
 ```
  bin/rails tailwindcss:watch
 ```
+

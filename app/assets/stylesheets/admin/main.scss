@@ -7,9 +7,28 @@ body{
   margin: 0;
 }
 .active {
-  background-color: $seconday;
-  border-radius: 24px;
-  margin: 5px 0;
-  color: $primary;
+  color: white;
   font-weight: 400;
+  border-left: 2px solid $primary;
+  transition: all 0.5s;
+  svg{
+    color: $primary;
+  }
+}
+
+:root {
+  --antd-wave-shadow-color: #1DA57A; 
+}
+
+.ant-btn-primary {
+  background-color: $primary;
+  border-color: $primary;
+  &:hover{
+    background-color: $primary !important;
+    transition: 0.5s;
+  }
+}
+
+p{
+  margin: 0 !important;
 }

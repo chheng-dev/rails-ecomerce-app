@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Frontend</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag 'frontend', media: 'all' %>
+  <%= javascript_include_tag 'frontend' %>
+</head>
+<body>
+  <header>
+    <h1>Frontend Header</h1>
+  </header>
+  <main>
+    <%= yield %>
+  </main>
+  <footer>
+    <p>Frontend Footer</p>
+  </footer>
+</body>
+</html>

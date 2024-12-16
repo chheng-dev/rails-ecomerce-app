@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag 'admin', media: 'all' %>
+  <%= javascript_include_tag 'admin' %>
+  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
+<body class="h-screen flex flex-col">
+  <!-- Header -->
+  <header>
+    <%= render 'layouts/admin/header' %>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main class="flex flex-grow overflow-hidden">
+    <!-- Sidebar -->
+    <div class="w-1/6 bg-white text-white h-full overflow-y-auto">
+      <%= render 'layouts/admin/sidebar' %>
+    </div>
+
+    <!-- Main Content -->
+    <div class="w-5/6 bg-tertiary h-full overflow-y-auto p-4 rounded-2xl mr-6 mt-2">
+      <%= yield %>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <%# <footer class="bg-gray-800 text-white text-center py-2">
+    <p>Admin Footer</p>
+  </footer> %>
+</body>
+</html>

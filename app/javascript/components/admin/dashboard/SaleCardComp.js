@@ -1,5 +1,5 @@
+import { MoveUp, TrendingUp } from 'lucide-react';
 import React from 'react'
-import { FaArrowTrendUp } from "react-icons/fa6";
 
 class SaleCardComp extends React.Component {
   constructor(props) {
@@ -25,12 +25,12 @@ class SaleCardComp extends React.Component {
                 </p>
                 <div className='flex gap-x-1'>
                   <p className='text-xs text-green-500'>2.9%</p>
-                  <FaArrowTrendUp className='w-3 h-3' />
+                  <TrendingUp className='w-3 h-3' />
                 </div>
 
               </div>
               <h3 className='text-xl font-medium my-1 text-primary'>911.34K</h3>
-              <div className='flex justify-between gap-x-3 mt-2'>
+              <div className='flex justify-between gap-x-3 m-2'>
                 <div className=''>
                   <p className='text-xs text-gray-500'>vs. last month</p>
                 </div>

@@ -3,6 +3,7 @@ import Select from "react-select";
 import CategoryService from "../../../../../services/admin/CategoryService";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import LoadingSpinner from "../../loading/LoadingSpinner";
 
 export default class CreateCategoryComp extends React.Component {
   constructor(props) {
@@ -10,6 +11,7 @@ export default class CreateCategoryComp extends React.Component {
 
     this.state = {
       categoryName: "",
+      loading: false,
       selectedOptionColor: null,
       description: "",
       avatar: null,
@@ -37,7 +39,6 @@ export default class CreateCategoryComp extends React.Component {
   handleFileChange(event) {
     const file = event.target.files[0];
     if (file) {
-      // Store the file object instead of a URL
       this.setState({
         avatar: file,
         previewImage: URL.createObjectURL(file) // This is just for previewing the image
@@ -60,6 +61,7 @@ export default class CreateCategoryComp extends React.Component {
 
   async handleSubmit(e) {
     e.preventDefault();
+    this.setState({ loading: true }); // Show the spinner
 
     const { categoryName, description, selectedOptionColor, avatar } = this.state;
 
@@ -70,6 +72,7 @@ export default class CreateCategoryComp extends React.Component {
 
     if (!categoryName || !selectedOptionColor) {
       toast.error("Please fill all required fields.");
+      this.setState({ loading: false }); // Hide the spinner
       return;
     }
 
@@ -78,11 +81,11 @@ export default class CreateCategoryComp extends React.Component {
     formData.append("description", description || "");
     formData.append("category_color", JSON.stringify(color));
 
-    // Append the actual file, not a blob URL
     if (avatar && avatar instanceof File) {
       formData.append("avatar", avatar);
     } else {
       toast.error("Please select an image file.");
+      this.setState({ loading: false }); // Hide the spinner
       return;
     }
 
@@ -101,6 +104,8 @@ export default class CreateCategoryComp extends React.Component {
       const errorMessage =
         error.response?.data?.error || "Error creating category. Please try again.";
       toast.error(errorMessage);
+    } finally {
+      this.setState({ loading: false }); // Always hide the spinner
     }
   }
 
@@ -134,6 +139,7 @@ export default class CreateCategoryComp extends React.Component {
 
     return (
       <Fragment>
+        {this.state.loading && <LoadingSpinner size="60px" color="#FF6D2F" overlayOpacity={0.7} />}
         <form className="mx-auto" onSubmit={this.handleSubmit}>
           <div className="mb-5">
             <label
@@ -205,11 +211,12 @@ export default class CreateCategoryComp extends React.Component {
               Image
             </label>
             <input
-              type="file"
+              className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 p-2"
               id="avatar"
-              className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
+              type="file"
               onChange={this.handleFileChange}
             />
+
             {previewImage && (
               <img
                 src={previewImage}

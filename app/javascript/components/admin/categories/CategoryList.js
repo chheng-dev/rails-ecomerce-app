@@ -4,6 +4,7 @@ import CategoryService from "../../../../services/admin/CategoryService";
 import { Edit3Icon, EyeIcon, Trash2Icon } from "lucide-react";
 import ModalComp from "../sd/ModalComp";
 import { toast } from "react-toastify";
+import LoadingSpinner from "../loading/LoadingSpinner";
 
 export default class CategoryList extends React.Component {
   constructor(props) {
@@ -43,10 +44,12 @@ export default class CategoryList extends React.Component {
   }
 
   async handleActionDelete() {
+    this.setState({ loading: true });
     const { id } = this.state.selectedRow;
 
     if (!id) {
       toast.error("No category selected for deletion.");
+      this.setState({ loading: false });
       return;
     }
 
@@ -65,6 +68,8 @@ export default class CategoryList extends React.Component {
         error.response?.data?.error || "Error deleting category. Please try again.";
       toast.error(errorMessage);
       this.setState({ visible: false });
+    } finally {
+      this.setState({ loading: false });
     }
   }
 
@@ -132,9 +137,10 @@ export default class CategoryList extends React.Component {
       },
     ];
 
-    const { visible } = this.state;
+    const { visible, loading } = this.state;
     return (
       <div>
+        {loading && <LoadingSpinner size="60px" color="#FF6D2F" overlayOpacity={0.7} />}
         <TableComp
           data={this.state.categories}
           columns={columns}

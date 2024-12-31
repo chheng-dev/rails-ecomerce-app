@@ -28,7 +28,7 @@ class TableComp extends Component {
   }
 
   render() {
-    const { columns, data, isLoading, rowsPerPageOptions = [5, 10, 15] } = this.props;
+    const { columns, data, rowsPerPageOptions = [5, 10, 15] } = this.props;
     const { currentPage, rowsPerPage } = this.state;
 
     const totalRows = data ? data.length : 0;
@@ -41,14 +41,6 @@ class TableComp extends Component {
       label: `${option} rows`,
     }));
 
-    if (isLoading) {
-      return (
-        <div className="flex items-center justify-center h-64">
-          <span className="text-gray-500">Loading...</span>
-        </div>
-      );
-    }
-
     if (!data || data.length === 0) {
       return (
         <div className="flex items-center justify-center h-64">
@@ -57,25 +49,19 @@ class TableComp extends Component {
       );
     }
 
-    // Generate an array of page numbers with ellipsis if necessary
     const pageNumbers = [];
     const maxPagesToShow = 9;
 
     if (totalPages <= maxPagesToShow) {
-      // If total pages are less than or equal to 9, show all page numbers
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
-      // Show 1, 2, ..., and the last page if total pages are more than 9
       if (currentPage <= 4) {
-        // Show first 5 pages
         pageNumbers.push(1, 2, 3, 4, 5, '...');
       } else if (currentPage >= totalPages - 3) {
-        // Show last 5 pages
         pageNumbers.push('...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
       } else {
-        // Show current page, previous 2 pages, and next 2 pages
         pageNumbers.push('...', currentPage - 1, currentPage, currentPage + 1, '...');
       }
     }

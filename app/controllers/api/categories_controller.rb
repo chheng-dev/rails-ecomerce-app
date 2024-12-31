@@ -50,6 +50,47 @@ class Api::CategoriesController < Admin::ApplicationController
     end
   end  
 
+  def edit
+    category = Category.find_by!(id: params[:id]);
+    render json: category
+  rescue ActiveRecord::RecordNotFound
+      render json: { error: 'Category not found' }, status: :not_found
+  end
+
+  def update 
+    category = Category.find_by!(id: params[:id])
+
+    if params[:avatar]
+      begin
+        uploaded_image = Cloudinary::Uploader.upload(params[:avatar])
+        avatar_url = uploaded_image['secure_url']
+
+        category_color = nil
+        if params[:category_color].present?
+          category_color = JSON.parse(params[category_color]) rescue nil
+        end
+
+        if category.update(category_params.merge(avatar: avatar_url))
+          if category_color
+            @catgory.create_category_color!(name: category_color['name'], code: category_color['code'])
+          end
+
+          render json: category, status: :ok
+        else
+          render json: category.errors, status: :unprocessable_entity
+        end
+      rescue Cloudinary::Api::Error => e
+        render json: {error: e.message}, status: :unprocessable_entity
+      end
+    else
+      if category.update(category_params)
+        render json: category, status: :ok
+      else
+        render json: category.errors, status: :unprocessable_entity
+      end
+    end
+  end
+
   def destroy
     @category = Category.find_by(id: params[:id])
 

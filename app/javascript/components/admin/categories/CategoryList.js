@@ -140,7 +140,7 @@ export default class CategoryList extends React.Component {
     const { visible, loading } = this.state;
     return (
       <div>
-        {loading && <LoadingSpinner size="60px" color="#FF6D2F" overlayOpacity={0.7} />}
+        <LoadingSpinner isVisible={loading} />
         <TableComp
           data={this.state.categories}
           columns={columns}

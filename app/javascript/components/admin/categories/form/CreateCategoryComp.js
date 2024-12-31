@@ -139,7 +139,7 @@ export default class CreateCategoryComp extends React.Component {
 
     return (
       <Fragment>
-        {this.state.loading && <LoadingSpinner size="60px" color="#FF6D2F" overlayOpacity={0.7} />}
+        <LoadingSpinner isVisible={this.state.loading} />
         <form className="mx-auto" onSubmit={this.handleSubmit}>
           <div className="mb-5">
             <label

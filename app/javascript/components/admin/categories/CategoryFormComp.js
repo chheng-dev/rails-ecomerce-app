@@ -1,21 +1,22 @@
 import React, { Fragment } from "react";
 import Select from "react-select";
-import CategoryService from "../../../../../services/admin/CategoryService";
-import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import LoadingSpinner from "../../loading/LoadingSpinner";
+import CategoryService from "../../../../services/admin/CategoryService";
+import "react-toastify/dist/ReactToastify.css";
+import LoadingSpinner from "../loading/LoadingSpinner";
 
-export default class CreateCategoryComp extends React.Component {
+class CategoryForm extends React.Component {
   constructor(props) {
     super(props);
 
+    const { category } = this.props;
     this.state = {
-      categoryName: "",
-      loading: false,
+      categoryName: category?.name || "",
+      description: category?.description || "",
       selectedOptionColor: null,
-      description: "",
+      previewImage: category?.avatar || "",
       avatar: null,
-      previewImage: null,
+      loading: false,
       options: [
         { value: "red", label: "Red", colorCode: "#F70104" },
         { value: "darkRed", label: "Dark Red", colorCode: "#ff5733" },
@@ -29,97 +30,102 @@ export default class CreateCategoryComp extends React.Component {
         { value: "black", label: "Black", colorCode: "#343a40" },
       ],
     };
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleFileChange = this.handleFileChange.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleColorChange = this.handleColorChange.bind(this);
   }
 
-  handleFileChange(event) {
+  componentDidMount() {
+    if (this.props.isEditMode) {
+      const { color } = this.props;
+      const formattedColor = {
+        value: color.name,
+        label: color.name,
+        colorCode: color.code
+      }
+      this.setState({ selectedOptionColor: formattedColor })
+    }
+  }
+
+  handleInputChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
+
+  handleColorChange = (selectedOptionColor) => {
+    this.setState({ selectedOptionColor });
+  };
+
+  handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       this.setState({
         avatar: file,
-        previewImage: URL.createObjectURL(file) // This is just for previewing the image
+        previewImage: URL.createObjectURL(file),
       });
     }
-  }
-
-  handleInputChange(event) {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
-  }
-
-  handleColorChange = (selectedOptionColor) => {
-    const color = {
-      name: selectedOptionColor.label,
-      code: selectedOptionColor.colorCode
-    };
-    this.setState({ color: color, selectedOptionColor });
   };
 
-  async handleSubmit(e) {
+  handleSubmit = async (e) => {
     e.preventDefault();
-    this.setState({ loading: true }); // Show the spinner
+    this.setState({ loading: true });
 
     const { categoryName, description, selectedOptionColor, avatar } = this.state;
 
-    const color = {
-      name: selectedOptionColor ? selectedOptionColor.label : '',
-      code: selectedOptionColor ? selectedOptionColor.colorCode : ''
-    };
-
     if (!categoryName || !selectedOptionColor) {
-      toast.error("Please fill all required fields.");
-      this.setState({ loading: false }); // Hide the spinner
+      toast.error("Please fill in all required fields.");
+      this.setState({ loading: false });
       return;
     }
+
+    const color = {
+      name: selectedOptionColor.label,
+      code: selectedOptionColor.colorCode,
+    };
 
     const formData = new FormData();
     formData.append("name", categoryName);
     formData.append("description", description || "");
     formData.append("category_color", JSON.stringify(color));
 
-    if (avatar && avatar instanceof File) {
+    if (avatar) {
       formData.append("avatar", avatar);
-    } else {
-      toast.error("Please select an image file.");
-      this.setState({ loading: false }); // Hide the spinner
-      return;
     }
 
     try {
-      await CategoryService.createCategory(formData);
-      toast.success("Category created successfully!");
-      this.setState({
-        categoryName: "",
-        description: "",
-        selectedOptionColor: null,
-        avatar: null,
-        previewImage: null,
-      });
+      if (this.props.isEditMode) {
+        const { id } = this.props.category
+        await CategoryService.updateCategory(id, formData);
+        toast.success("Category updated successfully!");
+      } else {
+        await CategoryService.createCategory(formData);
+        toast.success("Category created successfully!");
+
+        this.setState({
+          categoryName: "",
+          description: "",
+          selectedOptionColor: null,
+          avatar: null,
+          previewImage: "",
+        });
+      }
     } catch (error) {
-      console.error("Error creating category:", error);
-      const errorMessage =
-        error.response?.data?.error || "Error creating category. Please try again.";
-      toast.error(errorMessage);
+      console.error("Error processing category:", error);
+      toast.error(this.props.isEditMode ? "Failed to update category. Please try again." : "Failed to create category. Please try again.");
     } finally {
-      this.setState({ loading: false }); // Always hide the spinner
+      this.setState({ loading: false });
     }
-  }
+  };
 
   render() {
-    const { categoryName, description, selectedOptionColor, options, previewImage } = this.state;
+    const {
+      categoryName,
+      description,
+      selectedOptionColor,
+      options,
+      previewImage,
+      loading,
+    } = this.state;
 
     const customStyles = {
       control: (provided) => ({
-        ...provided,
-        borderRadius: 8,
-        fontSize: "14px",
-        width: "100%",
-      }),
-      menu: (provided) => ({
         ...provided,
         borderRadius: 8,
         fontSize: "14px",
@@ -132,20 +138,16 @@ export default class CreateCategoryComp extends React.Component {
             ? "#FF6D2F"
             : "white",
         color: state.isSelected || state.isFocused ? "white" : "black",
-        cursor: "pointer",
-        padding: "10px",
+        padding: 10,
       }),
     };
 
     return (
       <Fragment>
-        <LoadingSpinner isVisible={this.state.loading} />
+        <LoadingSpinner isVisible={loading} />
         <form className="mx-auto" onSubmit={this.handleSubmit}>
           <div className="mb-5">
-            <label
-              htmlFor="categoryName"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
+            <label htmlFor="categoryName" className="block mb-2 text-sm font-medium text-gray-900">
               Category Name<span className="text-red-500">*</span>
             </label>
             <input
@@ -160,10 +162,7 @@ export default class CreateCategoryComp extends React.Component {
           </div>
 
           <div className="mb-5">
-            <label
-              htmlFor="color"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
+            <label htmlFor="color" className="block mb-2 text-sm font-medium text-gray-900">
               Color<span className="text-red-500">*</span>
             </label>
             <Select
@@ -177,7 +176,7 @@ export default class CreateCategoryComp extends React.Component {
                 <div className="flex items-center gap-x-2">
                   <span>{label}</span>
                   <div
-                    className="rounded-full w-4 h-4 border border-gray-400"
+                    className="rounded-full w-4 h-4 border"
                     style={{ backgroundColor: colorCode }}
                   ></div>
                 </div>
@@ -186,17 +185,14 @@ export default class CreateCategoryComp extends React.Component {
           </div>
 
           <div className="mb-5">
-            <label
-              htmlFor="description"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
+            <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900">
               Description
             </label>
             <textarea
               id="description"
               name="description"
               rows="4"
-              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
+              className="block w-full text-sm rounded-lg border p-2.5"
               placeholder="Write your description here..."
               value={description}
               onChange={this.handleInputChange}
@@ -204,36 +200,28 @@ export default class CreateCategoryComp extends React.Component {
           </div>
 
           <div className="mb-5">
-            <label
-              htmlFor="avatar"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
+            <label htmlFor="avatar" className="block mb-2 text-sm font-medium text-gray-900">
               Image
             </label>
             <input
-              className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 p-2"
+              className="block w-full text-sm rounded-lg border p-2"
               id="avatar"
               type="file"
               onChange={this.handleFileChange}
             />
-
-            {previewImage && (
-              <img
-                src={previewImage}
-                alt="Preview"
-                className="mt-3 max-w-xs rounded-lg"
-              />
-            )}
+            {previewImage && <img src={previewImage} alt="Preview" className="mt-3 max-w-xs" />}
           </div>
 
           <button
             type="submit"
             className="text-white bg-primary font-medium rounded-lg text-sm px-5 py-2.5"
           >
-            Save Category
+            {this.props.isEditMode ? "Update Category" : "Save Category"}
           </button>
         </form>
       </Fragment>
     );
   }
 }
+
+export default CategoryForm;

@@ -39,6 +39,10 @@ export default class CategoryList extends React.Component {
     console.log(`Action: ${actionType} clicked for row:`, row);
   };
 
+  handleActionEditClick(row) {
+    location.href = `/admin/categories/${row.id}/edit`
+  }
+
   handleActionConfirmDelete(row) {
     this.setState({ visible: true, selectedRow: row });
   }
@@ -85,8 +89,11 @@ export default class CategoryList extends React.Component {
         key: "name",
         render: (row) =>
           row.name ? (
-            <div className="bg-[#EFF2F7] p-0.5 px-2 w-16 h-16 rounded-md">
-              <img src={row.avatar} className="w-16 h-16 object-contain rounded-md" />
+            <div className="">
+              <div className="flex items-center">
+                <img src={row.avatar} className="bg-[#EFF2F7] p-0.5 px-2 w-16 h-16 object-contain rounded-md" />
+                <span className="ml-2">{row.name}</span>
+              </div>
             </div>
           ) : (
             <p></p>
@@ -114,23 +121,23 @@ export default class CategoryList extends React.Component {
         key: "action",
         render: (row) => (
           <div className="flex items-center gap-x-2">
-            <button
+            {/* <button
               className="bg-gray-200 p-2 rounded-full"
               onClick={() => this.handleActionClick(row, "view")}
             >
               <EyeIcon size={16} />
-            </button>
+            </button> */}
             <button
               className="bg-secondary p-2 rounded-full"
-              onClick={() => this.handleActionClick(row, "edit")}
+              onClick={() => this.handleActionEditClick(row)}
             >
-              <Edit3Icon size={16} />
+              <Edit3Icon className="text-primary" size={16} />
             </button>
             <button
-              className="bg-primary p-2 rounded-full text-white"
+              className="bg-[#FFEFEF] p-2 rounded-full text-white"
               onClick={() => this.handleActionConfirmDelete(row)}
             >
-              <Trash2Icon size={16} />
+              <Trash2Icon className="text-red-500" size={16} />
             </button>
           </div>
         ),

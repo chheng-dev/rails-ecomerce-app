@@ -1,3 +1,3 @@
 class ApplicationController < ActionController::Base
-  layout 'frontend'
+  # layout 'frontend'
 end

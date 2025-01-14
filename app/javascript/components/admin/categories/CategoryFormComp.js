@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import CategoryService from "../../../../services/admin/CategoryService";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingSpinner from "../loading/LoadingSpinner";
+import TextFieldComp from "../sd/form/TextFieldComp";
+
 
 class CategoryForm extends React.Component {
   constructor(props) {
@@ -141,21 +143,20 @@ class CategoryForm extends React.Component {
         padding: 10,
       }),
     };
+    console.log("categoryName", categoryName)
 
     return (
       <Fragment>
         <LoadingSpinner isVisible={loading} />
         <form className="mx-auto" onSubmit={this.handleSubmit}>
           <div className="mb-5">
-            <label htmlFor="categoryName" className="block mb-2 text-sm font-medium text-gray-900">
-              Category Name<span className="text-red-500">*</span>
-            </label>
-            <input
+            <TextFieldComp
               type="text"
-              id="categoryName"
+              label="Category Name"
               name="categoryName"
-              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
-              required
+              id="categoryName"
+              required={true}
+              placeholder="Enter your email"
               value={categoryName}
               onChange={this.handleInputChange}
             />
@@ -192,7 +193,7 @@ class CategoryForm extends React.Component {
               id="description"
               name="description"
               rows="4"
-              className="block w-full text-sm rounded-lg border p-2.5"
+              className="block w-full text-sm rounded-lg border p-2.5 bg-gray-50  border-gray-300 text-gray-900 placeholder:text-gray-400 focus:ring-primary focus:border-primary"
               placeholder="Write your description here..."
               value={description}
               onChange={this.handleInputChange}
@@ -204,7 +205,7 @@ class CategoryForm extends React.Component {
               Image
             </label>
             <input
-              className="block w-full text-sm rounded-lg border p-2"
+              className="block w-full text-sm rounded-lg border p-2 placeholder:text-gray-400 focus:ring-primary focus:border-primary"
               id="avatar"
               type="file"
               onChange={this.handleFileChange}
@@ -219,7 +220,7 @@ class CategoryForm extends React.Component {
             {this.props.isEditMode ? "Update Category" : "Save Category"}
           </button>
         </form>
-      </Fragment>
+      </Fragment >
     );
   }
 }

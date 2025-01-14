@@ -41,3 +41,166 @@ p{
     transform: rotate(360deg);
   }
 }
+/* Dropdown button styling */
+// .dropdown {
+//   position: relative;
+//   display: inline-block;
+// }
+
+// .dropbtn {
+//   background-color: #eae9e9;
+//   border: none;
+//   border-radius: 50%;
+//   width: 40px;
+//   height: 40px;
+//   padding: 0;
+//   position: relative;
+// }
+
+// /* Icon styling */
+// .icon {
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   width: 20px;
+//   height: 20px;
+//   color: #9ca3af; /* gray-400 */
+// }
+
+// /* Dropdown content styling */
+// .dropdown-content {
+//   position: absolute;
+//   background-color: white;
+//   min-width: 160px;
+//   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+//   z-index: 1;
+//   border-radius: 8px;
+//   top: 120%; /* Adjust dropdown position */
+//   left: 50%;
+//   transform: translateX(-50%);
+//   opacity: 0; /* Initially hidden */
+//   visibility: hidden; /* Initially hidden */
+//   transition: opacity 0.3s ease, visibility 0s 0.3s, transform 0.3s ease; /* Smooth transitions */
+//   transform: translateY(10px); /* Slightly shifted for a smooth entry */
+// }
+
+// .dropdown:hover .dropdown-content {
+//   opacity: 1; /* Fade in */
+//   visibility: visible; /* Make the dropdown content visible */
+//   transform: translateY(0); /* Slide into position */
+//   transition: opacity 0.3s ease, visibility 0s 0s, transform 0.3s ease; /* Ensures immediate transition when hover ends */
+// }
+
+// /* Dropdown links styling */
+// .dropdown-content a {
+//   color: black;
+//   padding: 8px 16px;
+//   text-decoration: none;
+//   display: block;
+//   border-bottom: 1px solid #ddd;
+//   border-radius: 4px;
+// }
+
+// .dropdown-content a:hover {
+//   background-color: #f1f1f1;
+// }
+
+
+/* Dropdown button styling */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  background-color: #eae9e9;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  position: relative;
+  outline: none; /* Remove outline on focus */
+}
+
+/* Icon styling */
+.icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  color: #9ca3af; /* gray-400 */
+}
+
+/* Dropdown content styling */
+.dropdown-content {
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 8px;
+  top: 120%; /* Adjust dropdown position */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0; /* Initially hidden */
+  visibility: hidden; /* Initially hidden */
+  transition: opacity 0.3s ease, visibility 0s 0.3s, transform 0.3s ease; /* Smooth transitions */
+  transform: translateY(10px); /* Slightly shifted for a smooth entry */
+}
+
+/* Show dropdown when button is focused */
+.dropdown:focus-within .dropdown-content {
+  opacity: 1; /* Fade in */
+  visibility: visible; /* Make the dropdown content visible */
+  transform: translateY(0); /* Slide into position */
+  transition: opacity 0.3s ease, visibility 0s 0s, transform 0.3s ease; /* Ensures immediate transition when focus ends */
+}
+
+/* Dropdown links styling */
+.dropdown-content a {
+  color: black;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: block;
+  border-bottom: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.filter-primary {
+  filter: brightness(0) saturate(100%) invert(52%) sepia(42%) saturate(3385%) hue-rotate(340deg) brightness(103%) contrast(101%);
+}
+
+.filter-gray{
+  filter: brightness(0) saturate(100%) invert(64%) sepia(7%) saturate(574%) hue-rotate(186deg) brightness(92%) contrast(89%);
+}
+
+.filter-white{
+  filter: brightness(0) saturate(100%) invert(99%) sepia(0%) saturate(3143%) hue-rotate(167deg) brightness(116%) contrast(74%);
+}
+
+#categoryDropdownMenu {
+  display: none;
+  height: 0; 
+  opacity: 0; 
+  overflow: hidden; 
+}
+
+#categoryDropdownMenu.open {
+  display: block;
+  height: auto; 
+  opacity: 1; 
+  transition-duration: 4s;
+  transition-delay: 2s;
+}
+
+select:focus{
+  outline: none !important;
+}

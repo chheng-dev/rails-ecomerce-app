@@ -1,1 +1,5 @@
-<%= react_component 'admin/layouts/HeaderComp' %>
+<%= react_component 'admin/layouts/HeaderComp', {
+    username: current_user.username,
+    destroyUserSessionUrl: destroy_user_session_path
+  }
+%>

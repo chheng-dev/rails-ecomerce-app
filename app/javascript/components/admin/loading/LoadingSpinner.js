@@ -21,7 +21,7 @@ const LoadingAnimation = ({ isVisible, size = 250, delay = 500 }) => {
   if (!showAnimation) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 transition-all">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999999] transition-all">
       <Lottie
         animationData={loadingAnimation}
         loop={true}

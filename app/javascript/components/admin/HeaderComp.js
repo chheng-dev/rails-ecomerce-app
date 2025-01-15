@@ -1,9 +1,6 @@
 import React, { Fragment } from "react";
-import { BackTop, Button, Space } from "antd";
-import { ChevronDown } from "lucide-react";
-import Select from "react-select";
-import { options } from "less";
-import SelectComp from "../sd/SelectComp";
+import { Button } from "antd";
+import SelectComp from "./sd/SelectComp";
 
 export default class HeaderComp extends React.Component {
   constructor(props) {
@@ -15,7 +12,7 @@ export default class HeaderComp extends React.Component {
         { value: 'this_month', label: 'This Month' },
         { value: 'last_month', label: 'Last Month' },
         { value: 'this_year', label: 'This Year' },
-      ]
+      ],
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -31,28 +28,28 @@ export default class HeaderComp extends React.Component {
 
   render() {
     const { options, selectedOption } = this.state;
-
+    const { link, title, list_title } = this.props;
     return (
       <Fragment>
         <div className="flex justify-between items-center px-4">
           <div>
-            <h2 className="font-semibold text-lg py-3">All Categories List</h2>
+            <h2 className="font-semibold text-lg py-3">{list_title}</h2>
           </div>
           <div className="flex items-center space-x-2">
             <Button
               type="primary"
               size="medium"
               className="text-xs"
-              href="/admin/categories/new"
+              href={link}
             >
-              Add Category
+              {title}
             </Button>
             <div className="relative">
               <SelectComp
                 options={options}
                 value={selectedOption}
                 onChange={this.handleChange}
-                placeholder="Choose an animal"
+                placeholder="Choose an month"
               />
             </div>
           </div>

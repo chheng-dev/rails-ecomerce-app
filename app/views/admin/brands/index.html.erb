@@ -2,13 +2,13 @@
   <div class="card">
     <div class="card-header">
       <%= react_component("admin/HeaderComp", {
-        link: new_admin_category_path,
-        title: 'Add Category',
-        list_title: 'All Categories List'
+        link: new_admin_brand_path,
+        title: 'Add Brand',
+        list_title: 'All Brands List'
       })%>
     </div>
     <div class="card-body px-4">
-      <%= react_component("admin/categories/CategoryList") %>
+      <%= react_component("admin/brands/BrandListComp", {apibrandsUrl: api_brands_path}) %>
     </div>
   </div>
 </div>  

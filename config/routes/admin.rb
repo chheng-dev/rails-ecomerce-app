@@ -3,5 +3,4 @@ namespace :admin do
 
   resources :posts
   resources :categories
-  resources :brands
 end

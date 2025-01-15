@@ -1,11 +1,7 @@
 <div class="bg-white rounded-md">
   <div class="card">
     <div class="card-header">
-      <%= react_component("admin/HeaderComp", {
-        link: new_admin_category_path,
-        title: 'Add Category',
-        list_title: 'All Categories List'
-      })%>
+      <%= react_component("admin/categories/HeaderComp") %>
     </div>
     <div class="card-body px-4">
       <%= react_component("admin/categories/CategoryList") %>

@@ -1,0 +1,21 @@
+<div class="relative group">
+  <%= link_to '#', class: "flex items-center justify-between text-gray-400 text-sm px-4 py-3 hover:bg-gray-700 #{active_class('admin/brands')}", 
+                 id: "brandDropdown", 
+                 aria: { expanded: "false", controls: "brandDropdownMenu" } do %>
+    <div class="flex items-center">
+      <%= image_tag("icons/brand.svg", 
+                    class: "w-5 h-5 #{request.path.include?('admin/brands') ? 'filter-primary' : 'filter-gray'}", 
+                    id: "brandIcon") %>
+      <span class="ml-2" id="brandTitle">
+        Brand
+      </span>
+    </div>
+    <%= image_tag('icons/arrow-down.svg', class: "w-4 h-4 filter-gray", id: "dropdownIcon") %>
+  <% end %>
+
+  <!-- Collapsible Submenu -->
+  <div id="brandDropdownMenu" class="hidden flex flex-col mt-2 pl-8">
+    <%= link_to 'List', admin_brands_path, class: "block px-4 pb-2 text-sm #{request.path == admin_brands_path ? 'text-white' : 'text-gray-400'}" %>
+    <%= link_to 'Create', new_admin_brand_path, class: "block px-4 py-2 text-sm #{request.path == new_admin_brand_path ? 'text-white' : 'text-gray-400'}" %>
+  </div>
+</div>

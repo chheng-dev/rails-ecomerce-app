@@ -127,6 +127,8 @@ GEM
     ffi (1.17.1-x86_64-linux-musl)
     font-awesome-sass (6.2.1)
       sassc (~> 2.0)
+    friendly_id (5.5.1)
+      activerecord (>= 4.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
     http-accept (1.7.0)
@@ -358,6 +360,7 @@ DEPENDENCIES
   devise
   dotenv-rails
   font-awesome-sass (~> 6.2.0)
+  friendly_id (~> 5.4)
   jbuilder (~> 2.5)
   jquery-rails
   listen (>= 3.0.5, < 3.2)

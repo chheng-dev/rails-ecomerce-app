@@ -204,3 +204,7 @@ p{
 select:focus{
   outline: none !important;
 }
+
+#svgIcon:hover{
+  filter: brightness(0) saturate(100%) invert(52%) sepia(42%) saturate(3385%) hue-rotate(340deg) brightness(103%) contrast(101%);
+}

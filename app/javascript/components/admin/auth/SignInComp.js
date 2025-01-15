@@ -38,16 +38,16 @@
 //               <p className="text-gray-400 text-sm pb-6">Enter your email address and password to access admin panel.</p>
 //               <div className="space-y-6">
 //                 <div>
-//                   <TextFieldComp
-//                     type="email"
-//                     label="Email"
-//                     name="email"
-//                     id="email"
-//                     required={true}
-//                     placeholder="Enter your email"
-//                     value={this.state.password}
-//                     onChange={this.handleInputChange}
-//                   />
+                  // <TextFieldComp
+                  //   type="email"
+                  //   label="Email"
+                  //   name="email"
+                  //   id="email"
+                  //   required={true}
+                  //   placeholder="Enter your email"
+                  //   value={this.state.password}
+                  //   onChange={this.handleInputChange}
+                  // />
 //                 </div>
 //                 <div>
 //                   <TextFieldComp

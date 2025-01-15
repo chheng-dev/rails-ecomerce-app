@@ -1,32 +1,47 @@
 $(document).ready(function () {
+  const dropdownMap = {
+    categories: {
+      dropdown: '#categoryDropdown',
+      menu: '#categoryDropdownMenu',
+      icon: '#categoryIcon',
+      title: '#categoryTitle',
+      links: {
+        '/admin/categories': '#listLink',
+        '/admin/categories/new': '#createLink',
+      },
+    },
+    brands: {
+      dropdown: '#brandDropdown',
+      menu: '#brandDropdownMenu',
+      icon: '#brandIcon',
+      title: '#brandTitle',
+      links: {
+        '/admin/brands': '#brandListLink',
+        '/admin/brands/new': '#brandCreateLink',
+      },
+    },
+  };
+
   const currentPath = window.location.pathname;
 
-  // Handle initial visibility and styling based on the URL
-  if (currentPath === '/admin/categories/new' || currentPath === '/admin/categories') {
-    $('#categoryDropdownMenu').removeClass('hidden').addClass('open');
+  for (const key in dropdownMap) {
+    const { menu, icon, title, links } = dropdownMap[key];
+    if (currentPath in links) {
+      $(menu).removeClass('hidden').addClass('open');
+      $(icon).addClass('filter-primary').removeClass('filter-gray');
+      $(title).addClass('text-white').removeClass('text-gray-400');
+      $(links[currentPath]).addClass('text-white').removeClass('text-gray-400');
+    }
   }
 
-  if (currentPath === '/admin/categories') {
-    $('#listLink').addClass('text-white').removeClass('text-gray-400');
-    $('#createLink').removeClass('text-white').addClass('text-gray-400');
-    $('#categoryTitle').addClass('text-white');
-  } else if (currentPath === '/admin/categories/new') {
-    $('#createLink').addClass('text-white').removeClass('text-gray-400');
-    $('#listLink').removeClass('text-white').addClass('text-gray-400');
-    $('#categoryTitle').addClass('text-white');
+  // Attach toggle event to each dropdown
+  for (const key in dropdownMap) {
+    const { dropdown, menu, icon, title } = dropdownMap[key];
+    $(dropdown).on('click', function (e) {
+      e.preventDefault();
+      $(menu).toggleClass('hidden open');
+      $(icon).toggleClass('filter-gray filter-white');
+      $(title).toggleClass('text-gray-400 text-white');
+    });
   }
-
-  // Toggle dropdown menu visibility and icon
-  $('#categoryDropdown').on('click', function (e) {
-    e.preventDefault(); // Prevent default link behavior
-
-    $('#categoryDropdownMenu').toggleClass('hidden open');
-
-    // Toggle the dropdown icon
-    const $icon = $('#dropdownIcon');
-    $('#categoryTitle').addClass('text-white');
-    $('#categoryIcon').removeClass('filter-gray')
-    $('#categoryIcon').addClass('filter-white')
-
-  });
 });

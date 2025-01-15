@@ -44,25 +44,21 @@ export default class HeaderComp extends React.Component {
             </div>
             <div className="flex items-center gap-x-3">
               <img
-                id="svgIcon"
                 src={MoonIcon}
                 alt="Moon Icon"
                 className="w-6 h-6 cursor-pointer filter-gray"
               />
               <img
-                id="svgIcon"
                 src={BellIcon}
                 alt="Bell Icon"
                 className="w-6 h-6 cursor-pointer filter-gray"
               />
               <img
-                id="svgIcon"
                 src={SettingIcon}
                 alt="Setting Icon"
                 className="w-6 h-6 cursor-pointer filter-gray"
               />
               <img
-                id="svgIcon"
                 src={ClockIcon}
                 alt="Clock Icon"
                 className="w-6 h-6 cursor-pointer filter-gray"

@@ -74,6 +74,7 @@ class BrandFormComp extends React.Component {
       contentType: false,
       processData: false,
       success: (response) => {
+        const { slug } = response.brand;
         toast.success(
           this.props.isEditMode
             ? "Brand updated successfully!"
@@ -89,7 +90,7 @@ class BrandFormComp extends React.Component {
           })
         }
 
-        window.location.replace("/admin/brands");
+        window.location.href = `/admin/brands/${slug}/edit`
       },
       error: (xhr, status, error) => {
         console.error('Error processing brand:', brand);

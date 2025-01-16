@@ -9,7 +9,7 @@ export default class TextFieldComp extends React.Component {
       <div>
         {label && (
           <label htmlFor={name} className="text-gray-500 text-sm mb-2 block">
-            {label}
+            {label} {required && <span className="text-red-500 font-bold">*</span>}
           </label>
         )}
         <input

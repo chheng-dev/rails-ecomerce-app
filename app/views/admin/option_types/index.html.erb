@@ -1,0 +1,15 @@
+
+<div class="bg-white rounded-md">
+  <div class="card">
+    <div class="card-header">
+      <%= react_component("admin/HeaderComp", {
+        link: new_admin_option_type_path,
+        title: 'Add Option Type',
+        list_title: 'All Option Types List'
+      })%>
+    </div>
+    <div class="card-body px-4">
+      <%= react_component("admin/option_types/OptionTypeListComp",  {apiOptionTypesUrl: api_option_types_path}) %>
+    </div>
+  </div>
+</div>  

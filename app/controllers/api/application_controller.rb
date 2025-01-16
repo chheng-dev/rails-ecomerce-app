@@ -10,6 +10,10 @@ class Api::ApplicationController < ApplicationController
     }, status: :unprocessable_entity
   end
 
+  def uploaded_multiple_images(image)
+    # uploaded_images = 
+  end
+
   def remove_old_image(image_url)
     public_id = image_url.split("/").last.split(".").first 
   

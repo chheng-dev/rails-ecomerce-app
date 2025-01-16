@@ -68,7 +68,7 @@ class TableComp extends Component {
 
     return (
       <div className="relative overflow-x-auto rounded-lg">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-300">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               {columns.map((column, index) => (

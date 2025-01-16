@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_01_15_045252) do
+ActiveRecord::Schema.define(version: 2025_01_16_040054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,30 @@ ActiveRecord::Schema.define(version: 2025_01_15_045252) do
     t.index ["category_id"], name: "index_category_colors_on_category_id"
   end
 
+  create_table "product_images", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.string "image_url", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "is_active", default: false
+    t.index ["product_id"], name: "index_product_images_on_product_id"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.text "description"
+    t.decimal "price", precision: 10, scale: 2, null: false
+    t.integer "stock", default: 0
+    t.bigint "brand_id", null: false
+    t.bigint "category_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["brand_id"], name: "index_products_on_brand_id"
+    t.index ["category_id"], name: "index_products_on_category_id"
+    t.index ["slug"], name: "index_products_on_slug", unique: true
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -87,4 +111,7 @@ ActiveRecord::Schema.define(version: 2025_01_15_045252) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "category_colors", "categories"
+  add_foreign_key "product_images", "products"
+  add_foreign_key "products", "brands"
+  add_foreign_key "products", "categories"
 end

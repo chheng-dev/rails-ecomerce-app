@@ -24,11 +24,8 @@
     <%# Collapsible Brand Menu  %>
     <%= render "layouts/admin/menu/brand_menu" %>
 
-    <!-- Product Link -->
-    <%= link_to admin_posts_path, class: "flex items-center text-gray-400 text-sm px-4 py-3 hover:bg-gray-700" do %>
-      <%= image_tag("icons/product.svg", class: "w-5 h-5 #{active_class('admin/products') ? 'filter-primary' : 'filter-gray'}") %>
-      <span class="ml-2">Product</span>
-    <% end %>
+    <%# Collapsible Product Menu  %>
+    <%= render "layouts/admin/menu/product_menu" %>
 
   </nav>
 </div>

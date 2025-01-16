@@ -20,6 +20,16 @@ $(document).ready(function () {
         '/admin/brands/new': '#brandCreateLink',
       },
     },
+    products: {
+      dropdown: '#productDropdown',
+      menu: '#productDropdownMenu',
+      icon: '#productIcon',
+      title: '#productTitle',
+      links: {
+        '/admin/products': '#productListLink',
+        '/admin/products/new': '#productCreateLink',
+      },
+    },
   };
 
   const currentPath = window.location.pathname;

@@ -85,7 +85,7 @@ export default class HeaderComp extends React.Component {
                   </svg>
                 </button>
                 <div className="dropdown-content shadow-md rounded-md">
-                  <h5 className="text-inheriet font-semibold text-sm px-3 py-2">Welcome <span className="capitalize">{this.state.username}</span>!</h5>
+                  <h5 className="text-inheriet font-semibold text-sm px-3 py-2 text-gray-300">Welcome <span className="capitalize">{this.state.username}</span>!</h5>
                   <div className="my-2 cursor-pointer">
                     <div className="flex items-center justify-start gap-x-2 my-2 px-3 py-1 text-sm hover:bg-gray-100">
                       <UserCircleIcon className="text-[#5d7186] w-5" />

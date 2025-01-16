@@ -4,4 +4,5 @@ namespace :api do
   resources :option_types do 
     resources :option_values
   end
+  resources :products
 end

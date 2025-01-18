@@ -1,15 +1,17 @@
 import React from "react";
 import TableComp from "../sd/TableComp";
-import { Edit3Icon, Trash2Icon } from "lucide-react";
+import CategoryService from "../../../../services/admin/CategoryService";
+import { Edit3Icon, EyeIcon, Trash2Icon } from "lucide-react";
 import ModalComp from "../sd/ModalComp";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../loading/LoadingSpinner";
+import { currencyUsd } from "../../../../utils/formatPrice";
 
-export default class BrandListComp extends React.Component {
+export default class ProductListComp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      brands: [],
+      products: [],
       loading: false,
       visible: false,
       selectedRow: null,
@@ -20,18 +22,18 @@ export default class BrandListComp extends React.Component {
   }
 
   componentDidMount() {
-    this.getBrandsList();
+    this.getProductsList();
   }
 
-  async getBrandsList() {
+  async getProductsList() {
     this.setState({ loading: true });
     $.ajax({
       method: 'GET',
-      url: this.props.apibrandsUrl,
+      url: this.props.apiProductUrl,
       dataType: 'json',
       success: (data) => {
         this.setState({
-          brands: data.brands,
+          products: data.products,
           loading: false
         })
       },
@@ -46,7 +48,7 @@ export default class BrandListComp extends React.Component {
   };
 
   handleActionEditClick(row) {
-    location.href = `/admin/brands/${row.slug}/edit`
+    location.href = `/admin/categories/${row.id}/edit`
   }
 
   handleActionConfirmDelete(row) {
@@ -54,6 +56,7 @@ export default class BrandListComp extends React.Component {
   }
 
   async handleActionDelete() {
+    this.setState({ loading: true });
     const { id } = this.state.selectedRow;
 
     if (!id) {
@@ -62,24 +65,31 @@ export default class BrandListComp extends React.Component {
       return;
     }
 
+    try {
+      await CategoryService.deleteCategoryById(id);
 
-    this.setState({ loading: true });
+      this.setState({ visible: false });
 
-    $.ajax({
-      url: `${this.props.apibrandsUrl}/${id}`,
-      method: "DELETE",
-      success: () => {
-        this.setState({ visible: false });
-        this.getBrandsList();
-        toast.success('Brand has been deleted successfully.');
-      },
-      error: ({ responseJSON }) => {
-        toast.error(responseJSON?.error || "Error deleting category. Please try again.");
-      },
-      complete: () => this.setState({ loading: false }),
-    });
+      this.getCategories();
+
+      toast.success("Category deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting category:", error);
+
+      const errorMessage =
+        error.response?.data?.error || "Error deleting category. Please try again.";
+      toast.error(errorMessage);
+      this.setState({ visible: false });
+    } finally {
+      this.setState({ loading: false });
+    }
   }
 
+  activeProductImage(images) {
+    const activeImage = images.find(image => image.is_active);
+    console.log("activeImage", activeImage.url)
+    return activeImage.url;
+  }
 
   render() {
     const columns = [
@@ -88,21 +98,49 @@ export default class BrandListComp extends React.Component {
         key: "id",
       },
       {
-        label: "Brand",
+        label: "Product",
         key: "name",
         render: (row) =>
           row.name ? (
             <div className="">
               <div className="flex items-center">
-                <img src={row.image} className="bg-[#EFF2F7] p-0.5 px-2 w-16 h-16 object-contain rounded-md" />
-                <span className="ml-2">{row.name}</span>
+                <img src={this.activeProductImage(row.images)} className="bg-[#EFF2F7] p-0.5 px-2 w-16 h-16 object-contain rounded-md" />
+                <div className="flex flex-col ml-2 gap-y-2">
+                  <span>{row.name}</span>
+                  <span className="text-xs text-gray-400">
+                    Size: S,M,L
+                  </span>
+                </div>
               </div>
             </div>
           ) : (
             <p></p>
           )
       },
-      { label: "Description", key: "description", },
+      {
+        label: "Price",
+        key: "price",
+        render: (row) =>
+          row.price ? (
+            <div className="flex items-center gap-2">
+              <span className="text-gray-300">{currencyUsd(row.price)}</span>
+            </div>
+          ) : (
+            0
+          ),
+      },
+      {
+        label: "Stock",
+        key: "stock",
+      },
+      {
+        label: 'Category',
+        key: 'category'
+      },
+      {
+        label: 'Brand',
+        key: 'brand'
+      },
       {
         label: "Action",
         key: "action",
@@ -136,14 +174,14 @@ export default class BrandListComp extends React.Component {
       <div>
         <LoadingSpinner isVisible={loading} />
         <TableComp
-          data={this.state.brands}
+          data={this.state.products}
           columns={columns}
           isLoading={this.state.loading}
           onActionClick={this.handleActionClick}
           rowsPerPageOptions={[5, 10, 15]}
         />
         <ModalComp
-          title="Are you sure you want to delete this brand?"
+          title="Are you sure you want to delete this category?"
           visible={visible}
           onClose={() => this.setState({ visible: false })}
           handleSubmit={() => this.handleActionDelete()}

@@ -208,3 +208,7 @@ select:focus{
 #svgIcon:hover{
   filter: brightness(0) saturate(100%) invert(52%) sepia(42%) saturate(3385%) hue-rotate(340deg) brightness(103%) contrast(101%);
 }
+
+h1,h2,h3,h4,h5,h6{
+  font-family: $font-seconday !important;
+}

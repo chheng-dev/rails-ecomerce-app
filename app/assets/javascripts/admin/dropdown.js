@@ -20,6 +20,16 @@ $(document).ready(function () {
         '/admin/brands/new': '#brandCreateLink',
       },
     },
+    settings: {
+      dropdown: '#settingDropdown',
+      menu: '#settingDropdownMenu',
+      icon: '#settingIcon',
+      title: '#settingTitle',
+      links: {
+        '/admin/option_types': '#optionTypesLink',
+        '/admin/option_values': '#optionValuesLink',
+      },
+    },
   };
 
   const currentPath = window.location.pathname;

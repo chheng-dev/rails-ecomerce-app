@@ -90,7 +90,7 @@ class TableComp extends Component {
             ))}
           </tbody>
         </table>
-
+ 
         {/* Pagination Control */}
         <div className="flex items-center justify-between p-4">
           <div>

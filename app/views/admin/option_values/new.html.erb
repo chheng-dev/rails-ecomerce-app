@@ -1,0 +1,16 @@
+<div class="card bg-white rounded-md">
+  <div class="card-header">
+    <div class=" px-4 py-4">
+      <h2 class="">Option Type Information</h2>
+    </div>
+    <hr className="mb-3" />
+  </div>
+  <div class="card-body px-4 py-6">
+    <%= react_component('admin/option_types/EditOptionTypeComp', {
+      api_option_types_path: api_option_types_path,
+      option_type: @option_type,
+      option_values: @option_type.option_values
+      }) 
+    %>
+  </div>
+</div>

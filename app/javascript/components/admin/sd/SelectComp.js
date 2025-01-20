@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Select from 'react-select';
 
 const customStyles = {
@@ -44,16 +44,22 @@ const customStyles = {
   }),
 };
 
-const SelectComp = ({ options, value, onChange, placeholder }) => {
+const SelectComp = ({ label = "", required, options, value, onChange, placeholder, width, isMulti = false }) => {
   return (
-    <Select
-      className='w-48 text-sm'
-      options={options}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder || 'Select...'}
-      styles={customStyles}
-    />
+    <Fragment>
+      <label htmlFor="color" className="block mb-2 text-sm font-medium text-gray-900">
+        {label}<span className="text-red-500">{required === true && '*'}</span>
+      </label>
+      <Select
+        isMulti={isMulti}
+        className={`${width} text-sm`}
+        options={options}
+        value={value}
+        placeholder={placeholder || 'Select...'}
+        styles={customStyles}
+        onChange={onChange}
+      />
+    </Fragment>
   );
 };
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_01_16_072552) do
+ActiveRecord::Schema.define(version: 2025_01_20_064754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,15 @@ ActiveRecord::Schema.define(version: 2025_01_16_072552) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "option_types_products", force: :cascade do |t|
+    t.bigint "option_type_id", null: false
+    t.bigint "product_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["option_type_id"], name: "index_option_types_products_on_option_type_id"
+    t.index ["product_id"], name: "index_option_types_products_on_product_id"
+  end
+
   create_table "option_values", force: :cascade do |t|
     t.string "name", null: false
     t.string "presentation", null: false
@@ -106,6 +115,13 @@ ActiveRecord::Schema.define(version: 2025_01_16_072552) do
     t.bigint "category_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "weight"
+    t.string "status"
+    t.string "gender"
+    t.string "tag"
+    t.string "tex"
+    t.float "discount"
+    t.integer "tag_number"
     t.index ["brand_id"], name: "index_products_on_brand_id"
     t.index ["category_id"], name: "index_products_on_category_id"
     t.index ["slug"], name: "index_products_on_slug", unique: true
@@ -128,6 +144,8 @@ ActiveRecord::Schema.define(version: 2025_01_16_072552) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "category_colors", "categories"
+  add_foreign_key "option_types_products", "option_types"
+  add_foreign_key "option_types_products", "products"
   add_foreign_key "option_values", "option_types"
   add_foreign_key "product_images", "products"
   add_foreign_key "products", "brands"

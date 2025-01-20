@@ -128,7 +128,7 @@ export default class HeaderComp extends React.Component {
                   <input
                     type="text"
                     id="simple-search"
-                    className="bg-[#EAE9E9] border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 focus:ring-primary focus:border-primary"
+                    className="bg-[#EAE9E9] border border-gray-200 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 focus:ring-primary focus:border-primary"
                     placeholder="Search..."
                     required
                   />

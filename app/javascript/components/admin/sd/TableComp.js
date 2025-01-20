@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Select from "react-select";
 
 class TableComp extends Component {
   constructor(props) {
@@ -83,14 +82,14 @@ class TableComp extends Component {
               <tr key={rowIndex} className="odd:bg-white even:bg-gray-50">
                 {columns.map((column, colIndex) => (
                   <td key={colIndex} className="px-6 py-4">
-                    {column.render ? column.render(row) : row[column.key] || "N/A"}
+                    {column.render ? column.render(row, rowIndex) : row[column.key] || "N/A"}
                   </td>
                 ))}
               </tr>
             ))}
           </tbody>
         </table>
- 
+
         {/* Pagination Control */}
         <div className="flex items-center justify-between p-4">
           <div>

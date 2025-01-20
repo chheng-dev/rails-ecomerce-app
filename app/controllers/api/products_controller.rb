@@ -2,11 +2,12 @@ class Api::ProductsController < Api::ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    products = Product.includes(:category, :brand, :product_images).all#.order(created_at: :desc)
+    products = Product.includes(:category, :brand, :product_images).order(created_at: :desc).all
     
     render json: {
       success: true,
-      products: products.map do |product|
+      type: 'products',
+      attributes: products.map do |product|
         {
           id: product.id,
           name: product.name,
@@ -16,13 +17,36 @@ class Api::ProductsController < Api::ApplicationController
           stock: product.stock,
           category: product.category.name,
           brand: product.brand.name,
+          weight: product.weight,
+          status: product.status,
+          gender: product.gender,
+          tag: product.tag,
+          tex: product.tex,
+          discount: product.discount,
+          tag_number: product.tag_number,
           images: product.product_images.map do |image|
             {
               id: image.id,
               url: image.image_url,
               is_active: image.is_active
             }
-          end
+          end,
+          option_types: product.option_types.map do |opt|
+            {
+              id: opt.id,
+              name: opt.name,
+              presentation: opt.presentation,
+              option_values: opt.option_values.map do |option_value|
+                {
+                  id: option_value.id,
+                  name: option_value.name,
+                  presentation: option_value.presentation
+                }
+              end
+            }
+          end,
+          created_at: product.created_at,
+          updated_at: product.updated_at
         }
       end
     }, status: :ok
@@ -37,6 +61,10 @@ class Api::ProductsController < Api::ApplicationController
     @product = Product.new(product_params)
 
     if @product.save
+      if params[:option_type_ids].present?
+        @product.option_types = OptionType.where(id: params[:option_type_ids])
+      end
+
       if params[:images].present?
         images = Array.wrap(params[:images]) 
         image_urls = CloudinaryImageUploadService.uploaded_images(images)
@@ -64,6 +92,20 @@ class Api::ProductsController < Api::ApplicationController
   private 
 
   def product_params
-    params.permit(:name, :description, :price, :stock, :category_id, :brand_id)
+    params.permit(
+      :name, 
+      :description, 
+      :price, 
+      :stock, 
+      :category_id, 
+      :brand_id,
+      :weight,
+      :status,
+      :gender,
+      :tag,
+      :tex,
+      :discount,
+      :tag_number
+    )
   end
 end

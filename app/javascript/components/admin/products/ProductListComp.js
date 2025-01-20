@@ -1,12 +1,11 @@
 import React from "react";
 import TableComp from "../sd/TableComp";
 import CategoryService from "../../../../services/admin/CategoryService";
-import { Edit3Icon, EyeIcon, Trash2Icon } from "lucide-react";
+import { Edit3Icon, Trash2Icon } from "lucide-react";
 import ModalComp from "../sd/ModalComp";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../loading/LoadingSpinner";
 import { currencyUsd } from "../../../../utils/formatPrice";
-
 export default class ProductListComp extends React.Component {
   constructor(props) {
     super(props);
@@ -33,7 +32,7 @@ export default class ProductListComp extends React.Component {
       dataType: 'json',
       success: (data) => {
         this.setState({
-          products: data.products,
+          products: data.attributes,
           loading: false
         })
       },
@@ -86,19 +85,24 @@ export default class ProductListComp extends React.Component {
   }
 
   activeProductImage(images) {
-    const activeImage = images.find(image => image.is_active);
-    console.log("activeImage", activeImage.url)
-    return activeImage.url;
+    if (images.length > 0) {
+      const activeImage = images.find(image => image.is_active);
+      return activeImage.url;
+    }
+    return
   }
 
   render() {
     const columns = [
       {
-        label: "ID",
+        label: "No",
         key: "id",
+        render: (row, index) => (
+          <span>{index + 1}</span>
+        )
       },
       {
-        label: "Product",
+        label: "Product Name & Size",
         key: "name",
         render: (row) =>
           row.name ? (
@@ -132,6 +136,15 @@ export default class ProductListComp extends React.Component {
       {
         label: "Stock",
         key: "stock",
+        render: (row) =>
+          row.price ? (
+            <div className="flex flex-col items-start gap-2">
+              <p>{row.stock} Item Left</p>
+              <span className="text-xs">155 Sold</span>
+            </div>
+          ) : (
+            0
+          ),
       },
       {
         label: 'Category',
@@ -178,7 +191,7 @@ export default class ProductListComp extends React.Component {
           columns={columns}
           isLoading={this.state.loading}
           onActionClick={this.handleActionClick}
-          rowsPerPageOptions={[5, 10, 15]}
+          rowsPerPageOptions={[10]}
         />
         <ModalComp
           title="Are you sure you want to delete this category?"

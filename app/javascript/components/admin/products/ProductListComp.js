@@ -55,33 +55,29 @@ export default class ProductListComp extends React.Component {
   }
 
   async handleActionDelete() {
-    this.setState({ loading: true });
     const { id } = this.state.selectedRow;
 
     if (!id) {
-      toast.error("No category selected for deletion.");
+      toast.error("No product selected for deletion.");
       this.setState({ loading: false });
       return;
     }
 
-    try {
-      await CategoryService.deleteCategoryById(id);
+    this.setState({ loading: true });
 
-      this.setState({ visible: false });
-
-      this.getCategories();
-
-      toast.success("Category deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting category:", error);
-
-      const errorMessage =
-        error.response?.data?.error || "Error deleting category. Please try again.";
-      toast.error(errorMessage);
-      this.setState({ visible: false });
-    } finally {
-      this.setState({ loading: false });
-    }
+    $.ajax({
+      url: `${this.props.apiProductUrl}/${id}`,
+      method: "DELETE",
+      success: () => {
+        this.setState({ visible: false });
+        this.getProductsList();
+        toast.success('Product has been deleted successfully.');
+      },
+      error: ({ responseJSON }) => {
+        toast.error(responseJSON?.error || "Error deleting product. Please try again.");
+      },
+      complete: () => this.setState({ loading: false }),
+    });
   }
 
   activeProductImage(images) {
@@ -92,15 +88,17 @@ export default class ProductListComp extends React.Component {
     return
   }
 
+  onSelectAll(value) {
+    console.log(value);
+  }
+
+  onRowSelection(value) {
+    console.log(value);
+  }
+
   render() {
     const columns = [
-      {
-        label: "No",
-        key: "id",
-        render: (row, index) => (
-          <span>{index + 1}</span>
-        )
-      },
+      { type: "checkbox" },
       {
         label: "Product Name & Size",
         key: "name",
@@ -191,6 +189,8 @@ export default class ProductListComp extends React.Component {
           columns={columns}
           isLoading={this.state.loading}
           onActionClick={this.handleActionClick}
+          onSelectAll={(value) => this.onSelectAll(value)}
+          onRowSelection={(value) => this.onRowSelection(value)}
           rowsPerPageOptions={[10]}
         />
         <ModalComp

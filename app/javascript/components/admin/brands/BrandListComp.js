@@ -80,7 +80,6 @@ export default class BrandListComp extends React.Component {
     });
   }
 
-
   render() {
     const columns = [
       {

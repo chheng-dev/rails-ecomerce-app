@@ -9,7 +9,7 @@ export default class ProductBrandsComp extends React.Component {
 
     this.state = {
       loading: false,
-      selectedOptionColor: null,
+      selectedOption: null,
       options: [],
     }
     this.handleColorChange = this.handleColorChange.bind(this);
@@ -46,13 +46,15 @@ export default class ProductBrandsComp extends React.Component {
     }));
   }
 
-  handleColorChange = (selectedOptionColor) => {
-    this.setState({ selectedOptionColor });
+  handleColorChange = (selectedOption) => {
+    const { id } = selectedOption;
+    this.props.onChange(id);
+    this.setState({ selectedOption });
   };
 
 
   render() {
-    const { options, selectedOptionColor } = this.state;
+    const { options, selectedOption } = this.state;
     return (
       <Fragment>
         <SelectComp
@@ -61,7 +63,7 @@ export default class ProductBrandsComp extends React.Component {
           label="Brands"
           required={true}
           options={options}
-          value={selectedOptionColor}
+          value={selectedOption}
           onChange={this.handleColorChange}
           placeholder="Choose a Brands"
         />

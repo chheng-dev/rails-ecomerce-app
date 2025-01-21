@@ -18,14 +18,13 @@ class ProductFormComp extends React.Component {
   constructor(props) {
     super(props);
 
-    const { category } = this.props;
+    const { product } = this.props;
     this.state = {
-      categoryName: category?.name || "",
       productName: "",
-      description: category?.description || "",
+      description: product?.description || "",
       selectedOptionColor: null,
-      previewImage: category?.avatar || "",
-      avatar: null,
+      selectedGender: null,
+      previewImage: product?.avatar || "",
       loading: false,
       options: [
         { value: "red", label: "Red", colorCode: "#F70104" },
@@ -40,7 +39,41 @@ class ProductFormComp extends React.Component {
         { value: "black", label: "Black", colorCode: "#343a40" },
       ],
       selectedOptionTypes: [],
+      selectedCategoryId: null,
+      selectedBrandId: null,
+      optionTypeIds: null,
+      optionValueIds: null,
+      weight: "",
+      tagNumber: "",
+      stock: "",
+      price: 0,
+      discount: 0,
+      tex: "",
+      tag: '',
+      images: []
     };
+
+    this.genderOption = [
+      {
+        value: 'male',
+        label: 'Male'
+      },
+      {
+        value: 'female',
+        label: 'Female'
+      },
+      {
+        value: 'both',
+        label: "Both"
+      },
+      {
+        value: 'other',
+        label: 'Other'
+      }
+    ]
+
+    this.handleChangeGender = this.handleChangeGender.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -55,6 +88,25 @@ class ProductFormComp extends React.Component {
     }
   }
 
+  initailizeForm() {
+    this.setState({
+      productName: "",
+      description: "",
+      selectedCategoryId: null,
+      selectedBrandId: null,
+      selectedOptionTypes: null,
+      weight: "",
+      selectedGender: null,
+      tagNumber: "",
+      stock: 0,
+      tag: null,
+      price: 0,
+      discount: 0,
+      tex: "",
+      images: null
+    });
+  }
+
   handleInputChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
@@ -64,80 +116,153 @@ class ProductFormComp extends React.Component {
     this.setState({ selectedOptionColor });
   };
 
-  handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      this.setState({
-        avatar: file,
-        previewImage: URL.createObjectURL(file),
-      });
-    }
-  };
-
-  handleSubmit = async (e) => {
+  async handleSubmit(e) {
     e.preventDefault();
     this.setState({ loading: true });
 
-    const { categoryName, description, selectedOptionColor, avatar } = this.state;
+    const {
+      productName,
+      selectedBrandId,
+      selectedCategoryId,
+      description,
+      weight,
+      selectedGender,
+      tagNumber,
+      stock,
+      tag,
+      price,
+      discount,
+      tex,
+      optionTypeIds,
+      optionValueIds,
+      images
+    } = this.state;
 
-    if (!categoryName || !selectedOptionColor) {
+    // Validate required fields
+    if (!productName || !selectedCategoryId || !selectedBrandId || !stock) {
       toast.error("Please fill in all required fields.");
       this.setState({ loading: false });
       return;
     }
 
-    const color = {
-      name: selectedOptionColor.label,
-      code: selectedOptionColor.colorCode,
-    };
-
     const formData = new FormData();
-    formData.append("name", categoryName);
+    formData.append("name", productName);
     formData.append("description", description || "");
-    formData.append("category_color", JSON.stringify(color));
+    formData.append("category_id", selectedCategoryId);
+    formData.append("brand_id", selectedBrandId);
+    formData.append("price", price);
+    formData.append("discount", discount);
+    formData.append("stock", stock);
+    formData.append("weight", weight);
+    formData.append("gender", selectedGender);
+    formData.append("tag", tag);
+    formData.append("tex", tex);
+    formData.append("tag_number", tagNumber);
 
-    if (avatar) {
-      formData.append("avatar", avatar);
+    if (optionTypeIds && optionTypeIds.length > 0) {
+      optionTypeIds.forEach((optionTypeId) => {
+        formData.append("option_type_ids[]", optionTypeId);
+      });
     }
 
-    try {
-      if (this.props.isEditMode) {
-        const { id } = this.props.category
-        await CategoryService.updateCategory(id, formData);
-        toast.success("Category updated successfully!");
-      } else {
-        await CategoryService.createCategory(formData);
-        toast.success("Category created successfully!");
+    if (optionValueIds && optionValueIds.length > 0) {
+      optionValueIds.forEach((optionValueId) => {
+        formData.append("option_value_ids[]", optionValueId);
+      });
+    }
 
-        this.setState({
-          categoryName: "",
-          description: "",
-          selectedOptionColor: null,
-          avatar: null,
-          previewImage: "",
-        });
+    if (images && images.length > 0) {
+      images.forEach((image) => {
+        formData.append("images[]", image);
+      });
+    }
+
+    const url = this.props.isEditMode
+      ? `/api/products/${this.props.product.id}`
+      : '/api/products';
+
+    const method = this.props.isEditMode ? 'PUT' : 'POST';
+
+    $.ajax({
+      url: url,
+      method: method,
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: (response) => {
+        const { id, slug } = response;
+        toast.success(
+          this.props.isEditMode
+            ? "Product updated successfully!"
+            : "Product created successfully!"
+        );
+
+        if (!this.props.isEditMode) {
+          this.initializeForm();
+        }
+
+        // window.location.href = `/admin/product/${id}/edit`;
+        this.setState({ loading: false });
+      },
+      error: (xhr, status, error) => {
+        console.error('Error processing product:', error);
+        toast.error(
+          this.props.isEditMode
+            ? "Failed to update product. Please try again."
+            : "Failed to create product. Please try again."
+        );
+      },
+      complete: () => {
+        this.setState({ loading: false });
       }
-    } catch (error) {
-      console.error("Error processing category:", error);
-      toast.error(this.props.isEditMode ? "Failed to update category. Please try again." : "Failed to create category. Please try again.");
-    } finally {
-      this.setState({ loading: false });
-    }
-  };
+    });
+  }
+
 
   setOptionTypesInfo(selectedOptionTypes) {
-    this.setState({ selectedOptionTypes });
+    const optionTypeIds = selectedOptionTypes.map((item) => item.id);
+    this.setState({ optionTypeIds, selectedOptionTypes });
+  }
+
+  handleChangeCategory(selectedCategoryId) {
+    this.setState({ selectedCategoryId });
+  }
+
+  handleChangeBrand(selectedBrandId) {
+    this.setState({ selectedBrandId });
+  }
+
+  handleChangeGender(gender) {
+    const { value } = gender;
+    this.setState({ selectedGender: value });
+  }
+
+  handleOptionValueChange(optionTypeId, selectedOptionValues) {
+    const optionValueIds = selectedOptionValues.map((item) => item.value);
+    this.setState({ optionValueIds });
+  }
+
+  handleUploadImages(images) {
+    if (images) {
+      this.setState({ images });
+    }
   }
 
   render() {
     const {
-      categoryName,
       productName,
       description,
       selectedOptionColor,
       options,
-      previewImage,
+      selectedGender,
       loading,
+      weight,
+      tagNumber,
+      stock,
+      price,
+      discount,
+      tex,
+      images,
     } = this.state;
 
     return (
@@ -164,7 +289,7 @@ class ProductFormComp extends React.Component {
                 </div>
 
                 <div className="w-1/3">
-                  <ProductCategoriesComp />
+                  <ProductCategoriesComp onChange={(selectedCategoryId) => this.handleChangeCategory(selectedCategoryId)} />
                 </div>
 
                 <div className="w-1/3">
@@ -176,17 +301,17 @@ class ProductFormComp extends React.Component {
 
               <div className="flex items-center gap-4 mb-5">
                 <div className="w-1/3">
-                  <ProductBrandsComp />
+                  <ProductBrandsComp onChange={(selectedBrandId) => this.handleChangeBrand(selectedBrandId)} />
                 </div>
                 <div className="w-1/3">
                   <TextFieldComp
-                    type="text"
+                    type="number"
                     label="Weight"
                     name="weight"
                     id="weight"
                     required={false}
                     placeholder="In gm & kg"
-                    value={productName}
+                    value={weight}
                     onChange={this.handleInputChange}
                   />
                 </div>
@@ -196,9 +321,9 @@ class ProductFormComp extends React.Component {
                     id="gender"
                     label="Gender"
                     required={false}
-                    options={options}
-                    value={selectedOptionColor}
-                    onChange={this.handleColorChange}
+                    options={this.genderOption}
+                    value={selectedGender}
+                    onChange={this.handleChangeGender}
                     placeholder="Select Gender"
                   />
                 </div>
@@ -228,7 +353,7 @@ class ProductFormComp extends React.Component {
                     id="tagNumber"
                     required={false}
                     placeholder="#*******"
-                    value={productName}
+                    value={tagNumber}
                     onChange={this.handleInputChange}
                   />
                 </div>
@@ -240,7 +365,7 @@ class ProductFormComp extends React.Component {
                     id="stock"
                     required={true}
                     placeholder="Quantity"
-                    value={productName}
+                    value={stock}
                     onChange={this.handleInputChange}
                   />
                 </div>
@@ -263,7 +388,8 @@ class ProductFormComp extends React.Component {
           {/* Rendere Option Values  */}
           <div className="my-4 bg-white rounded-md">
             {
-              this.state.selectedOptionTypes.length > 0 && <RenderOptionValueComp selectedOptionTypes={this.state.selectedOptionTypes} />
+              this.state.selectedOptionTypes.length > 0 &&
+              <RenderOptionValueComp selectedOptionTypes={this.state.selectedOptionTypes} onChange={(optionTypeId, selectedOptionValues) => this.handleOptionValueChange(optionTypeId, selectedOptionValues)} />
             }
           </div>
 
@@ -286,7 +412,7 @@ class ProductFormComp extends React.Component {
                     required={false}
                     placeholder="000"
                     prefixIcon={<DollarSign className="w-4 h-4 text-gray-500" />}
-                    value={productName}
+                    value={price}
                     onChange={this.handleInputChange}
                   />
                 </div>
@@ -299,7 +425,7 @@ class ProductFormComp extends React.Component {
                     required={false}
                     placeholder="000"
                     prefixIcon={<TicketPercent className="w-4 h-4 text-gray-500" />}
-                    value={productName}
+                    value={discount}
                     onChange={this.handleInputChange}
                   />
                 </div>
@@ -307,12 +433,12 @@ class ProductFormComp extends React.Component {
                   <TextFieldComp
                     type="number"
                     label="Tex"
-                    name="text"
-                    id="text"
+                    name="tex"
+                    id="tex"
                     required={false}
                     placeholder="000"
                     prefixIcon={<FileTextIcon className="w-4 h-4 text-gray-500" />}
-                    value={productName}
+                    value={tex}
                     onChange={this.handleInputChange}
                   />
                 </div>
@@ -322,7 +448,7 @@ class ProductFormComp extends React.Component {
 
           {/* Product Images  */}
           <div className="product-image bg-white rounded-md my-3">
-            <ProductImagesComp />
+            <ProductImagesComp onChange={(images) => this.handleUploadImages(images)} />
           </div>
 
           <div className="bg-[#EFF2F6] rounded-md py-6 flex justify-end items-center pr-4">

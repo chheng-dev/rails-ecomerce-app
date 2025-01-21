@@ -2,8 +2,12 @@ class Product < ApplicationRecord
   belongs_to :category
   belongs_to :brand
   has_many :product_images, dependent: :destroy
-  has_many :option_types_products
+
+  has_many :option_types_products, dependent: :destroy
   has_many :option_types, through: :option_types_products
+
+  has_many :option_values_products, dependent: :destroy
+  has_many :option_values, through: :option_values_products
 
   accepts_nested_attributes_for :product_images
 

@@ -13,6 +13,7 @@ export default class RenderOptionValueComp extends React.Component {
   }
 
   handleOptionValueChange(optionTypeId, selectedOptionValues) {
+    this.props.onChange(optionTypeId, selectedOptionValues)
     this.setState((prevState) => ({
       selectedOptionValues: {
         ...prevState.selectedOptionValues,

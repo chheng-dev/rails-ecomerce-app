@@ -1,5 +1,6 @@
 class Api::ProductsController < Api::ApplicationController
   skip_before_action :verify_authenticity_token
+  before_action :set_product, only: [:show, :edit, :update, :destroy]
 
   def index
     products = Product.includes(:category, :brand, :product_images).order(created_at: :desc).all
@@ -62,7 +63,17 @@ class Api::ProductsController < Api::ApplicationController
 
     if @product.save
       if params[:option_type_ids].present?
-        @product.option_types = OptionType.where(id: params[:option_type_ids])
+        option_types = OptionType.where(id: params[:option_type_ids])
+        option_types.each do |option_type|
+          @product.option_types_products.create(option_type: option_type)
+        end
+      end
+
+      if params[:option_value_ids].present?
+        option_values = OptionValue.where(id: params[:option_value_ids])
+        option_values.each do |option_value|
+          @product.option_values_products.create(option_value: option_value)
+        end
       end
 
       if params[:images].present?
@@ -78,7 +89,10 @@ class Api::ProductsController < Api::ApplicationController
       render json: {
         success: true,
         message: 'Product created successfully!',
-        product: @product,
+        product: @product.as_json(include: {
+          option_types: { only: [:id, :name, :presentation] },
+          option_values: { only: [:id, :name, :presentation] }
+        }),
         images: @product.product_images
       }, status: :created
     else
@@ -89,7 +103,26 @@ class Api::ProductsController < Api::ApplicationController
     end
   end  
 
+  def destroy
+    if @product.destroy
+      render json: {
+        success: true,
+        message: 'Product and associated data deleted successfully'
+      }, status: :ok
+    else 
+      render json: {
+        success: false,
+        message: 'Failed to delete product',
+        errors: @product.errors.full_messages
+      }, status: :unprocessable_entity
+    end
+  end
+
   private 
+
+  def set_product
+    @product = Product.find(params[:id])
+  end
 
   def product_params
     params.permit(

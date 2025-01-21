@@ -9,10 +9,10 @@ export default class ProductCategoriesComp extends React.Component {
 
     this.state = {
       loading: false,
-      selectedOptionColor: null,
+      selectedOptionCategoy: null,
       options: [],
     }
-    this.handleColorChange = this.handleColorChange.bind(this);
+    this.handleCategoriesChange = this.handleCategoriesChange.bind(this);
   }
 
   componentDidMount() {
@@ -46,13 +46,15 @@ export default class ProductCategoriesComp extends React.Component {
     }));
   }
 
-  handleColorChange = (selectedOptionColor) => {
-    this.setState({ selectedOptionColor });
+  handleCategoriesChange = (selectedOptionCategoy) => {
+    const { id } = selectedOptionCategoy;
+    this.props.onChange(id);
+    this.setState({ selectedOptionCategoy });
   };
 
 
   render() {
-    const { options, selectedOptionColor } = this.state;
+    const { options, selectedOptionCategoy } = this.state;
     return (
       <Fragment>
         <SelectComp
@@ -61,8 +63,8 @@ export default class ProductCategoriesComp extends React.Component {
           label="Product Categories"
           required={true}
           options={options}
-          value={selectedOptionColor}
-          onChange={this.handleColorChange}
+          value={selectedOptionCategoy}
+          onChange={this.handleCategoriesChange}
           placeholder="Choose a categories"
         />
       </Fragment>

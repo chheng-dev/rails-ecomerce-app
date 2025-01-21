@@ -81,8 +81,11 @@ export default class CategoryList extends React.Component {
   render() {
     const columns = [
       {
-        label: "ID",
+        label: "No",
         key: "id",
+        render: (row, index) => (
+          <span>{index + 1}</span>
+        )
       },
       {
         label: "Category",

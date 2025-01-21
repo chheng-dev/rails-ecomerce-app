@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Select from "react-select";
 
 class TableComp extends Component {
   constructor(props) {
@@ -7,10 +6,13 @@ class TableComp extends Component {
     this.state = {
       currentPage: 1,
       rowsPerPage: props.rowsPerPageOptions ? props.rowsPerPageOptions[0] : 5,
+      selectedRows: []
     };
 
     this.handleRowsPerPageChange = this.handleRowsPerPageChange.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
+    this.handleSelectAll = this.handleSelectAll.bind(this);
+    this.handleRowSelection = this.handleRowSelection.bind(this);
   }
 
   handlePageChange(newPage) {
@@ -27,9 +29,45 @@ class TableComp extends Component {
     });
   }
 
+  handleSelectAll(isChecked) {
+    const { currentPage, rowsPerPage } = this.state;
+    const { data } = this.props;
+
+    const startRow = (currentPage - 1) * rowsPerPage;
+    const currentData = data.slice(startRow, startRow + rowsPerPage);
+
+    let updatedSelectedRows;
+
+    if (isChecked) {
+      const currentPageRowIds = currentData.map((row) => row.id);
+      updatedSelectedRows = [
+        ...this.state.selectedRows,
+        ...currentPageRowIds
+      ].filter((value, index, self) => self.indexOf(value) === index);
+    } else {
+      const currentPageRowIds = currentData.map((row) => row.id);
+      updatedSelectedRows = this.state.selectedRows.filter(
+        (id) => !currentPageRowIds.includes(id)
+      );
+    }
+    this.setState({
+      selectedRows: updatedSelectedRows
+    }, () => { this.props.onSelectAll(updatedSelectedRows) })
+  }
+
+  handleRowSelection(rowId) {
+    this.setState((prevState) => {
+      const { selectedRows } = prevState;
+      if (selectedRows.includes(rowId)) {
+        return { selectedRows: selectedRows.filter((id) => id !== rowId) };
+      }
+      return { selectedRows: [...selectedRows, rowId] }
+    }, () => { this.props.onRowSelection(this.state.selectedRows); })
+  }
+
   render() {
     const { columns, data, rowsPerPageOptions = [5, 10, 15] } = this.props;
-    const { currentPage, rowsPerPage } = this.state;
+    const { currentPage, rowsPerPage, selectedRows } = this.state;
 
     const totalRows = data ? data.length : 0;
     const totalPages = Math.ceil(totalRows / rowsPerPage);
@@ -73,24 +111,44 @@ class TableComp extends Component {
             <tr>
               {columns.map((column, index) => (
                 <th key={index} scope="col" className="px-6 py-3">
-                  {column.label}
+                  {column.type === "checkbox" ? (
+                    <input
+                      type="checkbox"
+                      className="h-4 w-4 border-gray-300 checked:text-primary focus:ring-0 rounded-md"
+                      checked={selectedRows.length > 0 && currentData.every((row) => selectedRows.includes(row.id))}
+                      onChange={(e) => this.handleSelectAll(e.target.checked)}
+                    />
+                  ) : (
+                    column.label
+                  )}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {currentData.map((row, rowIndex) => (
-              <tr key={rowIndex} className="odd:bg-white even:bg-gray-50">
+              <tr key={row.id || rowIndex} className="odd:bg-white even:bg-gray-50">
                 {columns.map((column, colIndex) => (
                   <td key={colIndex} className="px-6 py-4">
-                    {column.render ? column.render(row) : row[column.key] || "N/A"}
+                    {column.type === "checkbox" ? (
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 border-gray-300 checked:text-primary focus:ring-0 rounded-md"
+                        checked={selectedRows.includes(row.id)}
+                        onChange={() => this.handleRowSelection(row.id)}
+                      />
+                    ) : column.render ? (
+                      column.render(row, rowIndex)
+                    ) : (
+                      row[column.key] || ""
+                    )}
                   </td>
                 ))}
               </tr>
             ))}
           </tbody>
         </table>
- 
+
         {/* Pagination Control */}
         <div className="flex items-center justify-between p-4">
           <div>

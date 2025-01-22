@@ -1,16 +1,5 @@
-<div class="bg-white rounded-md">
-  <div class="card">
-    <div class="card-header">
-      <%= react_component("admin/HeaderComp", {
-        link: new_admin_product_path,
-        title: 'Add Product',
-        list_title: 'All Products List'
-      })%>
-    </div>
-    <div class="card-body px-4">
-      <%= react_component("admin/products/ProductListComp", {
-        apiProductUrl: api_products_path
-      }) %>
-    </div>
-  </div>
-</div>  
+<%= react_component("admin/products/ProductComp", {
+    new_admin_product_path: new_admin_product_path,
+    apiProductUrl: api_products_path,
+    apiProductDeleteAll: batch_destroy_api_products_path
+}) %>

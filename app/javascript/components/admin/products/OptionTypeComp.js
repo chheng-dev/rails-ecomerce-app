@@ -47,7 +47,7 @@ export default class OptionTypeComp extends React.Component {
       id: item.id,
       value: generateSlug(item.name),
       label: item.name,
-      option_values: item.option_values || [], // Option values for this option type
+      option_values: item.attributes.option_values || [],
     }));
   }
 

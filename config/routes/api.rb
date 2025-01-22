@@ -4,5 +4,8 @@ namespace :api do
   resources :option_types do 
     resources :option_values
   end
-  resources :products
+  resources :products do 
+    get 'option_types', to: 'products#option_types_by_product', on: :member
+    delete :batch_destroy, on: :collection
+  end
 end

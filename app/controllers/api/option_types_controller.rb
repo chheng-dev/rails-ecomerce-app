@@ -13,13 +13,16 @@ class Api::OptionTypesController < Api::ApplicationController
           name: option_type.name,
           presentation: option_type.presentation,
           filterable: option_type.filterable,
-          option_values: option_type.option_values.map do |option_value|
-            {
-              id: option_value.id,
-              name: option_value.name,
-              presentation: option_value.presentation
-            }
-          end
+          attributes: {
+            type: option_type.name.downcase,
+            option_values: option_type.option_values.map do |option_value|
+              {
+                id: option_value.id,
+                name: option_value.name,
+                presentation: option_value.presentation,
+              }
+            end
+          }
         }
       end
     }

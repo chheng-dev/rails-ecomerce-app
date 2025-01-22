@@ -1,7 +1,7 @@
 import React from "react";
 import TableComp from "../sd/TableComp";
 import CategoryService from "../../../../services/admin/CategoryService";
-import { Edit3Icon, Trash2Icon } from "lucide-react";
+import { Edit3Icon, Heading1, Trash2Icon } from "lucide-react";
 import ModalComp from "../sd/ModalComp";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../loading/LoadingSpinner";
@@ -89,11 +89,41 @@ export default class ProductListComp extends React.Component {
   }
 
   onSelectAll(value) {
-    console.log(value);
+    const selectedRows = value ? this.state.products.map((product) => product.id) : [];
+    this.setState({ selectedRows });
+    this.setSelectedRowsInfo(value);
   }
 
   onRowSelection(value) {
-    console.log(value);
+    this.setState({ selectedRows: value });
+    this.setSelectedRowsInfo(value);
+  }
+
+  renderOptionTypes = (row) => {
+    const { option_types } = row;
+    if (option_types && option_types.length > 0) {
+      return option_types.map((option, index) => {
+        const optionValues = option.attributes.option_values.map((value, valueIndex) => (
+          <span key={valueIndex} >
+            {value.presentation}
+            {valueIndex < option.attributes.option_values.length - 1 && ", "}
+          </span >
+        ));
+
+        return (
+          <div key={index}>
+            <strong>{option.presentation || option.presentation}</strong>: {optionValues}
+          </div>
+        );
+      });
+    }
+
+    return '';
+  };
+
+
+  setSelectedRowsInfo(selectedRows) {
+    this.props.handleSelectedRows(selectedRows);
   }
 
   render() {
@@ -110,7 +140,7 @@ export default class ProductListComp extends React.Component {
                 <div className="flex flex-col ml-2 gap-y-2">
                   <span>{row.name}</span>
                   <span className="text-xs text-gray-400">
-                    Size: S,M,L
+                    {this.renderOptionTypes(row)}
                   </span>
                 </div>
               </div>
@@ -157,12 +187,6 @@ export default class ProductListComp extends React.Component {
         key: "action",
         render: (row) => (
           <div className="flex items-center gap-x-2">
-            {/* <button
-              className="bg-gray-200 p-2 rounded-full"
-              onClick={() => this.handleActionClick(row, "view")}
-            >
-              <EyeIcon size={16} />
-            </button> */}
             <button
               className="bg-secondary p-2 rounded-full"
               onClick={() => this.handleActionEditClick(row)}

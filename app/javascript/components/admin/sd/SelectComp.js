@@ -44,7 +44,7 @@ const customStyles = {
   }),
 };
 
-const SelectComp = ({ label = "", required, options, value, onChange, placeholder, width, isMulti = false }) => {
+const SelectComp = ({ label = "", classNames, required, options, value, onChange, placeholder, width, isMulti = false }) => {
   return (
     <Fragment>
       <label htmlFor="color" className="block mb-2 text-sm font-medium text-gray-900">
@@ -52,7 +52,7 @@ const SelectComp = ({ label = "", required, options, value, onChange, placeholde
       </label>
       <Select
         isMulti={isMulti}
-        className={`${width} text-sm`}
+        className={`${width} ${classNames}`}
         options={options}
         value={value}
         placeholder={placeholder || 'Select...'}

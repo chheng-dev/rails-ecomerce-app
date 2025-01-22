@@ -37,13 +37,16 @@ class Api::ProductsController < Api::ApplicationController
               id: opt.id,
               name: opt.name,
               presentation: opt.presentation,
-              option_values: opt.option_values.map do |option_value|
-                {
-                  id: option_value.id,
-                  name: option_value.name,
-                  presentation: option_value.presentation
-                }
-              end
+              attributes: {
+                type: opt.presentation.downcase,
+                option_values: opt.option_values.map do |option_value|
+                  {
+                    id: option_value.id,
+                    name: option_value.name,
+                    presentation: option_value.presentation
+                  }
+                end
+              }
             }
           end,
           created_at: product.created_at,
@@ -118,6 +121,48 @@ class Api::ProductsController < Api::ApplicationController
     end
   end
 
+  def batch_destroy 
+    product_ids = batch_destroy_product_params[:product_ids]
+
+    if product_ids.blank?
+      render json: {
+        success: false,
+        message: 'No Product Ids provided'
+      }, status: :unprocessable_entity
+    end
+
+    products = Product.where(id: product_ids);
+    
+    if products.destroy_all
+      render json: {
+        success: true,
+        message: 'Product deleted successfully'
+      }, status: :ok 
+    else 
+      render json: {
+        success: false,
+        message: 'Failed to delete products'
+      }, status: :unprocessable_entity
+    end
+  end
+
+  def option_types_by_product
+    result = ProductService.fetch_option_types_by_product(params[:id])
+    # byebug
+    
+    if result.empty?
+      render json: {
+        success: false,
+        message: result[:error]
+      }, status: :not_found
+    else
+      render json: {
+        success: true,
+        option_types: result  
+      }, status: :ok
+    end
+  end
+
   private 
 
   def set_product
@@ -140,5 +185,9 @@ class Api::ProductsController < Api::ApplicationController
       :discount,
       :tag_number
     )
+  end
+
+  def batch_destroy_product_params 
+    params.permit(product_ids: [])
   end
 end

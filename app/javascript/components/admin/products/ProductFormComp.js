@@ -88,13 +88,13 @@ class ProductFormComp extends React.Component {
     }
   }
 
-  initailizeForm() {
+  initializeForm() {
     this.setState({
       productName: "",
       description: "",
       selectedCategoryId: null,
       selectedBrandId: null,
-      selectedOptionTypes: null,
+      selectedOptionTypes: [],
       weight: "",
       selectedGender: null,
       tagNumber: "",
@@ -103,7 +103,8 @@ class ProductFormComp extends React.Component {
       price: 0,
       discount: 0,
       tex: "",
-      images: null
+      images: [],
+      previewImage: null
     });
   }
 
@@ -138,7 +139,6 @@ class ProductFormComp extends React.Component {
       images
     } = this.state;
 
-    // Validate required fields
     if (!productName || !selectedCategoryId || !selectedBrandId || !stock) {
       toast.error("Please fill in all required fields.");
       this.setState({ loading: false });
@@ -183,39 +183,32 @@ class ProductFormComp extends React.Component {
 
     const method = this.props.isEditMode ? 'PUT' : 'POST';
 
-    $.ajax({
-      url: url,
-      method: method,
-      data: formData,
-      contentType: false,
-      processData: false,
-      success: (response) => {
-        const { id, slug } = response;
-        toast.success(
-          this.props.isEditMode
-            ? "Product updated successfully!"
-            : "Product created successfully!"
-        );
+    try {
+      await $.ajax({
+        url: url,
+        method: method,
+        data: formData,
+        contentType: false,
+        processData: false
+      });
 
-        if (!this.props.isEditMode) {
-          this.initializeForm();
-        }
+      toast.success(
+        this.props.isEditMode
+          ? "Product updated successfully!"
+          : "Product created successfully!"
+      );
 
-        // window.location.href = `/admin/product/${id}/edit`;
-        this.setState({ loading: false });
-      },
-      error: (xhr, status, error) => {
-        console.error('Error processing product:', error);
-        toast.error(
-          this.props.isEditMode
-            ? "Failed to update product. Please try again."
-            : "Failed to create product. Please try again."
-        );
-      },
-      complete: () => {
-        this.setState({ loading: false });
-      }
-    });
+      this.initializeForm();
+    } catch (error) {
+      console.error('Error processing product:', error);
+      toast.error(
+        this.props.isEditMode
+          ? "Failed to update product. Please try again."
+          : "Failed to create product. Please try again."
+      );
+    } finally {
+      this.setState({ loading: false });
+    }
   }
 
 
@@ -267,7 +260,7 @@ class ProductFormComp extends React.Component {
 
     return (
       <Fragment>
-        <LoadingSpinner isVisible={loading} />
+        <LoadingSpinner isVisible={loading} size={250} delay={500} />
 
         <form className="mx-auto mb-6" onSubmit={this.handleSubmit}>
           {/* Product Information */}
@@ -388,7 +381,7 @@ class ProductFormComp extends React.Component {
           {/* Rendere Option Values  */}
           <div className="my-4 bg-white rounded-md">
             {
-              this.state.selectedOptionTypes.length > 0 &&
+              this.state.selectedOptionTypes && this.state.selectedOptionTypes.length > 0 &&
               <RenderOptionValueComp selectedOptionTypes={this.state.selectedOptionTypes} onChange={(optionTypeId, selectedOptionValues) => this.handleOptionValueChange(optionTypeId, selectedOptionValues)} />
             }
           </div>

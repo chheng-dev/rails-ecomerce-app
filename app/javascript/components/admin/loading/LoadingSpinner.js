@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 import loadingAnimation from "../../../../assets/lottie/loading.json";
 
-const LoadingAnimation = ({ isVisible, size = 250, delay = 500 }) => {
+const LoadingSpinner = ({ isVisible, size = 250, delay = 500 }) => {
   const [showAnimation, setShowAnimation] = useState(false);
 
   useEffect(() => {
@@ -32,4 +32,4 @@ const LoadingAnimation = ({ isVisible, size = 250, delay = 500 }) => {
   );
 };
 
-export default LoadingAnimation;
+export default LoadingSpinner;

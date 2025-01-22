@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Square, SquareCheckBig } from "lucide-react";
 
 class TableComp extends Component {
   constructor(props) {
@@ -112,12 +113,17 @@ class TableComp extends Component {
               {columns.map((column, index) => (
                 <th key={index} scope="col" className="px-6 py-3">
                   {column.type === "checkbox" ? (
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 border-gray-300 checked:text-primary focus:ring-0 rounded-md"
-                      checked={selectedRows.length > 0 && currentData.every((row) => selectedRows.includes(row.id))}
-                      onChange={(e) => this.handleSelectAll(e.target.checked)}
-                    />
+                    <span className="cursor-pointer"
+                      onClick={() => this.handleSelectAll(!selectedRows.length || !currentData.every((row) => selectedRows.includes(row.id)))}
+                    >
+                      {
+                        selectedRows.length > 0 && currentData.every((row) => selectedRows.includes(row.id)) ? (
+                          <SquareCheckBig className="w-4 h-5 text-primary" data-checkbox-row-selection={true} />
+                        ) : (
+                          <Square className="w-4 h-5" data-checkbox-row-selection={true} f />
+                        )
+                      }
+                    </span>
                   ) : (
                     column.label
                   )}
@@ -127,16 +133,23 @@ class TableComp extends Component {
           </thead>
           <tbody>
             {currentData.map((row, rowIndex) => (
-              <tr key={row.id || rowIndex} className="odd:bg-white even:bg-gray-50">
+              <tr
+                key={row.id || rowIndex}
+                className={`${selectedRows.includes(row.id) ? 'bg-secondary' : 'odd:bg-white even:bg-gray-50'
+                  }`}
+              >
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex} className="px-6 py-4">
+                  <td key={colIndex} className="px-6 py-4" id={`row-${colIndex}`}>
                     {column.type === "checkbox" ? (
-                      <input
-                        type="checkbox"
-                        className="h-4 w-4 border-gray-300 checked:text-primary focus:ring-0 rounded-md"
-                        checked={selectedRows.includes(row.id)}
-                        onChange={() => this.handleRowSelection(row.id)}
-                      />
+                      <span className="cursor-pointer" onClick={() => this.handleRowSelection(row.id)}>
+                        {
+                          selectedRows.includes(row.id) ? (
+                            <SquareCheckBig className="w-4 h-5 font-bold text-primary" data-checkbox-row-selection={true} data-selected-rows={Array(selectedRows)} />
+                          ) : (
+                            <Square className="w-4 h-5 font-bold" data-checkbox-row-selection={true} data-selected-rows={Array(selectedRows)} />
+                          )
+                        }
+                      </span>
                     ) : column.render ? (
                       column.render(row, rowIndex)
                     ) : (

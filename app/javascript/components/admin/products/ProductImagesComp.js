@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import HeaderFormComp from "../sd/form/HeaderFormComp";
+import { X } from "lucide-react";
 
 export default class ProductImagesComp extends React.Component {
   constructor(props) {
@@ -30,6 +31,15 @@ export default class ProductImagesComp extends React.Component {
     });
   }
 
+  handleRemoveImage(index) {
+    const { previewImages, selectedFiles } = this.state;
+    const updatedPreviewImages = previewImages.filter((_, i) => i !== index);
+    const updatedSelectedFiles = selectedFiles.filter((_, i) => i !== index);
+    this.setState({ previewImages: updatedPreviewImages, selectedFiles: updatedSelectedFiles });
+    console.log(this.state.selectedFiles);
+    this.props.onChange(updatedSelectedFiles)
+  }
+
   render() {
     const { previewImages } = this.state;
     return (
@@ -46,15 +56,21 @@ export default class ProductImagesComp extends React.Component {
             onChange={this.onChange}
             multiple
           />
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-3">
             {
               previewImages.length > 0 &&
               previewImages.map((src, index) => (
-                <img
-                  key={index}
-                  src={src}
-                  alt={`Preview ${index + 1}`}
-                  className="mt-3 max-w-xs" />
+                <div key={index} className="w-24 border border-primary rounded-lg my-3">
+                  <div className="flex justify-end items-center gap-4">
+                    <X className="w-5 h-5 text-primary bg-secondary rounded-full cursor-pointer" onClick={() => this.handleRemoveImage(index)} />
+                  </div>
+                  <img
+                    key={index}
+                    src={src}
+                    alt={`Preview ${index + 1}`}
+                    className="mt-3" />
+
+                </div>
               ))
             }
           </div>

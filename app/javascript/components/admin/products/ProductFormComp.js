@@ -74,6 +74,7 @@ class ProductFormComp extends React.Component {
 
     this.handleChangeGender = this.handleChangeGender.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.initializeForm = this.initializeForm.bind(this);
   }
 
   componentDidMount() {
@@ -92,11 +93,11 @@ class ProductFormComp extends React.Component {
     this.setState({
       productName: "",
       description: "",
-      selectedCategoryId: null,
-      selectedBrandId: null,
+      selectedCategoryId: "",
+      selectedBrandId: "",
       selectedOptionTypes: [],
       weight: "",
-      selectedGender: null,
+      selectedGender: "",
       tagNumber: "",
       stock: 0,
       tag: null,
@@ -104,7 +105,7 @@ class ProductFormComp extends React.Component {
       discount: 0,
       tex: "",
       images: [],
-      previewImage: null
+      previewImage: ""
     });
   }
 

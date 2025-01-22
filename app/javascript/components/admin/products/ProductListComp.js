@@ -1,7 +1,6 @@
 import React from "react";
 import TableComp from "../sd/TableComp";
-import CategoryService from "../../../../services/admin/CategoryService";
-import { Edit3Icon, Heading1, Trash2Icon } from "lucide-react";
+import { PencilLineIcon, Trash2Icon } from "lucide-react";
 import ModalComp from "../sd/ModalComp";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../loading/LoadingSpinner";
@@ -191,7 +190,7 @@ export default class ProductListComp extends React.Component {
               className="bg-secondary p-2 rounded-full"
               onClick={() => this.handleActionEditClick(row)}
             >
-              <Edit3Icon className="text-primary" size={16} />
+              <PencilLineIcon className="text-primary" size={16} />
             </button>
             <button
               className="bg-[#FFEFEF] p-2 rounded-full text-white"

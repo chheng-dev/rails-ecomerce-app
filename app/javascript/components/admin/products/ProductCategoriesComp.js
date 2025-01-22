@@ -9,7 +9,7 @@ export default class ProductCategoriesComp extends React.Component {
 
     this.state = {
       loading: false,
-      selectedOptionCategoy: null,
+      selectedOptionCategoy: [],
       options: [],
     }
     this.handleCategoriesChange = this.handleCategoriesChange.bind(this);
@@ -63,7 +63,7 @@ export default class ProductCategoriesComp extends React.Component {
           label="Product Categories"
           required={true}
           options={options}
-          value={selectedOptionCategoy}
+          value={options.find(option => option.id === selectedOptionCategoy?.id)}
           onChange={this.handleCategoriesChange}
           placeholder="Choose a categories"
         />

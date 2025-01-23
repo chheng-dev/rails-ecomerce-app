@@ -11,6 +11,8 @@ const customStyles = {
     outline: '1px solid #EAE9E9',
     boxShadow: "none",
     cursor: "pointer",
+    backgroundColor: '#F3F5F7',
+    cursor: 'pointer'
   }),
   menu: (provided) => ({
     ...provided,
@@ -44,22 +46,29 @@ const customStyles = {
   }),
 };
 
-const SelectComp = ({ label = "", classNames, required, options, value, onChange, placeholder, width, isMulti = false }) => {
+const SelectComp = ({ label = "", classNames, required, options, value, onChange, placeholder, isMulti = false, isShowLabel = true }) => {
   return (
-    <Fragment>
-      <label htmlFor="color" className="block mb-2 text-sm font-medium text-gray-900">
-        {label}<span className="text-red-500">{required === true && '*'}</span>
-      </label>
+    <div className='remove-input-txt-border'>
+      {
+        isShowLabel && (
+          <label htmlFor="color" className="block mb-2 text-sm font-medium text-gray-900">
+            {label}<span className="text-red-500">{required === true && '*'}</span>
+          </label>
+        )
+      }
       <Select
+        isClearable
+        classNamePrefix="select"
+        isSearchable={true}
         isMulti={isMulti}
-        className={`${width} ${classNames}`}
+        className={`${classNames} w-full`}
         options={options}
         value={value}
         placeholder={placeholder || 'Select...'}
         styles={customStyles}
         onChange={onChange}
       />
-    </Fragment>
+    </div>
   );
 };
 

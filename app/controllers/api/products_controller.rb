@@ -3,7 +3,30 @@ class Api::ProductsController < Api::ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
 
   def index
-    products = Product.includes(:category, :brand, :product_images).order(created_at: :desc).all
+    products = Product.includes(:category, :brand, :product_images)#.order(created_at: :desc).all
+
+    products = products.where(brand_id: params[:brand_id]) if params[:brand_id].present?
+
+    products = products.where(category_id: params[:category_id]) if params[:category_id].present?
+
+    if params[:start_date].present? && params[:end_date].present?
+      start_date = Date.parse(params[:start_date]) 
+      end_date = Date.parse(params[:end_date])     
+
+      products = products.where("DATE(created_at) BETWEEN ? AND ?", start_date, end_date)
+    elsif params[:start_date].present?
+      start_date = Date.parse(params[:start_date]) 
+
+      products = products.where('DATE(created_at) >= ?', start_date)
+    elsif params[:end_date].present?
+      end_date = Date.parse(params[:end_date])
+      
+      products = products.where('DATE(updated_at) <= ?', end_date)
+    end
+
+    products = products.where('products.name ILIKE ?', "%#{params[:product_name]}%") if params[:product_name].present?
+
+    products = products.order(created_at: :desc)
     
     render json: {
       success: true,

@@ -5,8 +5,11 @@ module.exports = {
     './public/*.html',
     './app/helpers/**/*.rb',
     './app/javascript/**/*.js',
-    './app/views/**/*.{erb,haml,html,slim}'
+    // './app/javascript/**/*.{js,jsx,ts,tsx}',
+    './app/views/**/*.{erb,haml,html,slim}',
+    "./node_modules/react-tailwindcss-datepicker/dist/index.esm.{js,ts}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {

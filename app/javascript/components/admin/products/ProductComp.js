@@ -3,6 +3,7 @@ import HeaderComp from "../HeaderComp";
 import ProductListComp from "./ProductListComp";
 import LoadingAnimation from "../loading/LoadingSpinner";
 import ModalComp from "../sd/ModalComp";
+import ProductFilterComp from "./ProductFilterComp";
 
 export default class ProductComp extends React.Component {
   constructor(props) {
@@ -12,10 +13,12 @@ export default class ProductComp extends React.Component {
       isDeletionAll: false,
       selectedRows: null,
       loading: false,
-      visible: false
+      visible: false,
+      productQueryString: {}
     }
 
     this.productRef = React.createRef();
+    this.setProductQuery = this.setProductQuery.bind(this);
   }
 
   handleSelectedRows(rows) {
@@ -62,12 +65,17 @@ export default class ProductComp extends React.Component {
     });
   }
 
+  setProductQuery(query) {
+    this.productRef.current.getProductsList(query);
+  }
+
 
   render() {
     const { selectedRows, loading, visible } = this.state;
     return (
       <Fragment>
         <LoadingAnimation isVisible={loading} />
+        <ProductFilterComp setProductQuery={(query) => this.setProductQuery(query)} />
         <div class="bg-white rounded-md">
           <div class="card">
             <div class="card-header">

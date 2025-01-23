@@ -24,7 +24,7 @@ export default class ModalComp extends React.Component {
             <div
               id="popup-modal"
               tabIndex="-1"
-              className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50"
+              className="fixed inset-0 z-[9999999] flex justify-center items-center bg-gray-700 bg-opacity-50"
             >
               <div className="relative p-4 w-full max-w-md max-h-full">
                 <div className="relative bg-white rounded-lg shadow">

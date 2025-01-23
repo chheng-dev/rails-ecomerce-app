@@ -23,20 +23,58 @@ export default class ProductListComp extends React.Component {
     this.getProductsList();
   }
 
-  async getProductsList() {
+  async getProductsList(productQueryString = {}) {
     this.setState({ loading: true });
+
+    let query = "";
+    const { productName, selectedBrandId, selectedCategoryId, startDate, endDate } = productQueryString;
+
+    if (productName) {
+      query += `product_name=${encodeURIComponent(productName)}&`;
+    }
+
+    if (selectedBrandId) {
+      query += `brand_id=${encodeURIComponent(selectedBrandId)}&`;
+    }
+
+    if (selectedCategoryId) {
+      query += `category_id=${encodeURIComponent(selectedCategoryId)}&`;
+    }
+
+    if (startDate) {
+      query += `start_date=${encodeURIComponent(startDate)}&`;
+    }
+
+    if (startDate) {
+      query += `end_date=${encodeURIComponent(endDate)}&`;
+    }
+
+    query = query.slice(0, -1);
+
     $.ajax({
+      url: `/api/products?${query}`,
       method: 'GET',
-      url: this.props.apiProductUrl,
-      dataType: 'json',
-      success: (data) => {
-        this.setState({
-          products: data.attributes,
-          loading: false
-        })
+      success: (response) => {
+        if (response.success) {
+          this.setState({
+            products: response.attributes,
+            loading: false,
+            error: ''
+          })
+        }
+        else {
+          this.setState({
+            loading: false,
+            error: 'No products found for the selected date range.'
+          });
+        }
       },
       error: (xhr, status, error) => {
-        this.setState({ loading: false });
+        console.error('Error fetching products:', error);
+        this.setState({
+          loading: false,
+          error: 'Failed to fetch products. Please try again later.'
+        });
       }
     })
   };
@@ -135,7 +173,7 @@ export default class ProductListComp extends React.Component {
           row.name ? (
             <div className="">
               <div className="flex items-center">
-                <img src={this.activeProductImage(row.images)} className="bg-[#EFF2F7] p-0.5 px-2 w-16 h-16 object-contain rounded-md" />
+                <img src={this.activeProductImage(row.images)} className="bg-[#EFF2F7] p-0.5 px-2 w-12 h-12 object-contain rounded-md" />
                 <div className="flex flex-col ml-2 gap-y-2">
                   <span>{row.name}</span>
                   <span className="text-xs text-gray-400">

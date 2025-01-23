@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Square, SquareCheckBig } from "lucide-react";
+import EmptyDataComp from "./EmptyDataComp";
 
 class TableComp extends Component {
   constructor(props) {
@@ -82,8 +83,9 @@ class TableComp extends Component {
 
     if (!data || data.length === 0) {
       return (
-        <div className="flex items-center justify-center h-64">
-          <span className="text-gray-500">No data found</span>
+        <div className="flex flex-col items-center justify-center h-96">
+          <EmptyDataComp />
+          <h5 className="text-gray-400 text-sm">No data found.</h5>
         </div>
       );
     }

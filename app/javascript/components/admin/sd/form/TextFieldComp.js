@@ -24,7 +24,7 @@ export default class TextFieldComp extends React.Component {
             id={id}
             name={name}
             value={value}
-            className={`focus:ring-primary focus:border-primary bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg block w-full ${prefixIcon ? 'pl-12' : 'pl-3'} p-2.5 placeholder:text-gray-400`}
+            className={`focus:ring-primary focus:border-primary bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg block min-w-full ${prefixIcon ? 'pl-12' : 'pl-3'} p-2.5 placeholder:text-gray-400 }`}
             required={required}
             placeholder={placeholder}
             onChange={onChange}

@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
-import Select from "react-select";
 import SelectComp from "../sd/SelectComp";
-import { options } from "less";
+import slugify from "react-slugify";
 
 export default class ProductCategoriesComp extends React.Component {
   constructor(props) {
@@ -9,7 +8,7 @@ export default class ProductCategoriesComp extends React.Component {
 
     this.state = {
       loading: false,
-      selectedOptionCategoy: [],
+      selectedOptionCategory: [],
       options: [],
     }
     this.handleCategoriesChange = this.handleCategoriesChange.bind(this);
@@ -40,30 +39,31 @@ export default class ProductCategoriesComp extends React.Component {
 
   renderCategoriesOptions(options) {
     return options.map((item) => ({
-      id: item.id,
-      value: item.name.replace(" ", "-").toLowerCase(),
+      value: item.id,
       label: item.name
     }));
   }
 
-  handleCategoriesChange = (selectedOptionCategoy) => {
-    const { id } = selectedOptionCategoy;
-    this.props.onChange(id);
-    this.setState({ selectedOptionCategoy });
+  handleCategoriesChange(selectedOptionCategory) {
+    const selectedCategoryId = selectedOptionCategory ? selectedOptionCategory.value : null;
+    this.props.onChange(selectedCategoryId);
   };
 
 
   render() {
-    const { options, selectedOptionCategoy } = this.state;
+    const { options } = this.state;
+    const { width, isShowLabel, selectedCategoryId } = this.props;
+
     return (
       <Fragment>
         <SelectComp
-          width="max-w-full z-[999999]"
+          classNames={`z-[999999]`}
           id="gender"
           label="Product Categories"
+          isShowLabel={isShowLabel}
           required={true}
+          value={options.find(option => option.value === selectedCategoryId) || null}
           options={options}
-          value={options.find(option => option.id === selectedOptionCategoy?.id)}
           onChange={this.handleCategoriesChange}
           placeholder="Choose a categories"
         />

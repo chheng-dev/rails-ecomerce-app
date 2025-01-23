@@ -256,6 +256,8 @@ class ProductFormComp extends React.Component {
       price,
       discount,
       tex,
+      selectedCategoryId,
+      selectedBrandId,
       images,
     } = this.state;
 
@@ -283,7 +285,11 @@ class ProductFormComp extends React.Component {
                 </div>
 
                 <div className="w-1/3">
-                  <ProductCategoriesComp onChange={(selectedCategoryId) => this.handleChangeCategory(selectedCategoryId)} />
+                  <ProductCategoriesComp
+                    selectedCategoryId={selectedCategoryId}
+                    isShowLabel={true}
+                    onChange={(selectedCategoryId) => this.handleChangeCategory(selectedCategoryId)}
+                  />
                 </div>
 
                 <div className="w-1/3">
@@ -295,7 +301,10 @@ class ProductFormComp extends React.Component {
 
               <div className="flex items-center gap-4 mb-5">
                 <div className="w-1/3">
-                  <ProductBrandsComp onChange={(selectedBrandId) => this.handleChangeBrand(selectedBrandId)} />
+                  <ProductBrandsComp
+                    selectedBrandId={selectedBrandId}
+                    onChange={(selectedBrandId) => this.handleChangeBrand(selectedBrandId)}
+                  />
                 </div>
                 <div className="w-1/3">
                   <TextFieldComp

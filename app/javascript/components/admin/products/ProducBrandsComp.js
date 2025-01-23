@@ -11,6 +11,7 @@ export default class ProductBrandsComp extends React.Component {
       loading: false,
       selectedOption: null,
       options: [],
+      isShowLabel: props?.isShowLabel,
     }
     this.handleColorChange = this.handleColorChange.bind(this);
   }
@@ -40,30 +41,29 @@ export default class ProductBrandsComp extends React.Component {
 
   renderBrandsOptions(options) {
     return options.map((item) => ({
-      id: item.id,
-      value: item.name.replace(" ", "-").toLowerCase(),
+      value: item.id,
       label: item.name
     }));
   }
 
   handleColorChange = (selectedOption) => {
-    const { id } = selectedOption;
-    this.props.onChange(id);
-    this.setState({ selectedOption });
+    const selectedBrandId = selectedOption ? selectedOption.value : null;
+    this.props.onChange(selectedBrandId);
   };
 
 
   render() {
-    const { options, selectedOption } = this.state;
+    const { options, isShowLabel } = this.state;
+    const { selectedBrandId } = this.props;
     return (
       <Fragment>
         <SelectComp
-          width="max-w-full"
           id="brand"
           label="Brands"
+          isShowLabel={isShowLabel}
           required={true}
           options={options}
-          value={selectedOption}
+          value={options.find(option => option.value === selectedBrandId) || null}
           onChange={this.handleColorChange}
           placeholder="Choose a Brands"
         />

@@ -57,7 +57,7 @@ export default class ProductCategoriesComp extends React.Component {
     return (
       <Fragment>
         <SelectComp
-          classNames={`z-[999999]`}
+          // classNames={`z-[999999]`}
           id="gender"
           label="Product Categories"
           isShowLabel={isShowLabel}

@@ -34,7 +34,7 @@ export default class HeaderComp extends React.Component {
 
   render() {
     return (
-      <nav className="z-30 w-full relative top-0 mb-3">
+      <nav className="w-full mb-3">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start">

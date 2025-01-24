@@ -15,6 +15,13 @@ class TableComp extends Component {
     this.handlePageChange = this.handlePageChange.bind(this);
     this.handleSelectAll = this.handleSelectAll.bind(this);
     this.handleRowSelection = this.handleRowSelection.bind(this);
+    this.resetSelectedRows = this.resetSelectedRows.bind(this);
+  }
+
+  resetSelectedRows() {
+    this.setState({
+      selectedRows: []
+    })
   }
 
   handlePageChange(newPage) {

@@ -15,6 +15,7 @@ export default class ProductListComp extends React.Component {
       selectedRow: null,
     };
 
+    this.tableCompRef = React.createRef();
     this.handleActionClick = this.handleActionClick.bind(this);
     this.handleActionDelete = this.handleActionDelete.bind(this);
   }
@@ -60,7 +61,8 @@ export default class ProductListComp extends React.Component {
             products: response.attributes,
             loading: false,
             error: ''
-          })
+          });
+          this.props.setProductInfo(response.attributes);
         }
         else {
           this.setState({
@@ -163,6 +165,14 @@ export default class ProductListComp extends React.Component {
     this.props.handleSelectedRows(selectedRows);
   }
 
+  refResetSelectRowsTableComp() {
+    if (this.tableCompRef && this.tableCompRef.current && typeof this.tableCompRef.current.resetSelectedRows === 'function') {
+      this.tableCompRef.current.resetSelectedRows();
+    } else {
+      console.error('resetSelectedRows method not found on tableCompRef');
+    }
+  }
+
   render() {
     const columns = [
       { type: "checkbox" },
@@ -246,6 +256,7 @@ export default class ProductListComp extends React.Component {
       <div>
         <LoadingSpinner isVisible={loading} />
         <TableComp
+          ref={this.tableCompRef}
           data={this.state.products}
           columns={columns}
           isLoading={this.state.loading}
@@ -255,7 +266,7 @@ export default class ProductListComp extends React.Component {
           rowsPerPageOptions={[10]}
         />
         <ModalComp
-          title="Are you sure you want to delete this category?"
+          title="Are you sure you want to delete this product?"
           visible={visible}
           onClose={() => this.setState({ visible: false })}
           handleSubmit={() => this.handleActionDelete()}

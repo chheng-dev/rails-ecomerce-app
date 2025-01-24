@@ -3,7 +3,7 @@ class Api::ProductsController < Api::ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
 
   def index
-    products = Product.includes(:category, :brand, :product_images)#.order(created_at: :desc).all
+    products = Product.includes(:category, :brand, :product_images).order(updated_at: :desc).all
 
     products = products.where(brand_id: params[:brand_id]) if params[:brand_id].present?
 
@@ -25,8 +25,6 @@ class Api::ProductsController < Api::ApplicationController
     end
 
     products = products.where('products.name ILIKE ?', "%#{params[:product_name]}%") if params[:product_name].present?
-
-    products = products.order(created_at: :desc)
     
     render json: {
       success: true,
@@ -38,7 +36,6 @@ class Api::ProductsController < Api::ApplicationController
           slug: product.slug,
           description: product.description,
           price: product.price,
-          stock: product.stock,
           category: product.category.name,
           brand: product.brand.name,
           weight: product.weight,
@@ -48,6 +45,7 @@ class Api::ProductsController < Api::ApplicationController
           tex: product.tex,
           discount: product.discount,
           tag_number: product.tag_number,
+          stock: product.product_stock ? product.product_stock.stock : 0,
           images: product.product_images.map do |image|
             {
               id: image.id,
@@ -88,6 +86,9 @@ class Api::ProductsController < Api::ApplicationController
     @product = Product.new(product_params)
 
     if @product.save
+
+      @product.create_product_stock!(stock: params[:stock]) if params[:stock].present?
+
       if params[:option_type_ids].present?
         option_types = OptionType.where(id: params[:option_type_ids])
         option_types.each do |option_type|
@@ -186,6 +187,60 @@ class Api::ProductsController < Api::ApplicationController
     end
   end
 
+  def update_stock
+    product = Product.find(params[:id])
+    stock_quantity = params[:stock].to_i
+
+    if stock_quantity >= 0
+      ProductStockService.update_stock(product.id, stock_quantity)
+      render json: {
+        success: true,
+        message: 'Product stock updated successfully.',
+        attributes: {
+          type: 'product_stock',
+          product: product,
+          stock_quantity: stock_quantity
+        }
+      }, status: :ok
+    else
+      render json: {
+        success: false,
+        message: 'Invalid stock quantity'
+      }, status: :unprocessable_entity 
+    end
+  end
+
+  def update_multiple_stocks
+    product_ids = params[:product_id]
+    stock_quantity = params[:stock].to_i
+
+    if product_ids.present? && stock_quantity.present?
+      begin
+        ProductStockService.update_stocks_for_multiple_products(product_ids, stock_quantity)
+
+        render json: {
+          success: true,
+          message: 'Product stocks updated successfully for all products'
+        }, status: :ok
+      rescue ActiveRecord::RecordNotFound => e 
+        render json: {
+          success: false,
+          message: "One or more product not found: #{e.message}"
+        }, status: :not_found
+      rescue StandardError => e 
+        render json: {
+          success: false,
+          message: "Error updating stocks: #{e.message}"
+        }, status: :unprocessable_entity
+      end
+    else 
+      render json: {
+        success: false,
+        message: 'Invalid or missing products data'
+      }, status: :unprocessable_entity
+    end
+  end
+
   private 
 
   def set_product
@@ -197,7 +252,6 @@ class Api::ProductsController < Api::ApplicationController
       :name, 
       :description, 
       :price, 
-      :stock, 
       :category_id, 
       :brand_id,
       :weight,

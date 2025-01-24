@@ -2,27 +2,30 @@ import React from "react";
 
 export default class ButtonComp extends React.Component {
   render() {
-    const { title, type = "button", link, onClick, bgColor = "bg-primary" } = this.props;
+    const { title, type = "button", link, onClick, bgColor = "bg-primary", icon = '', } = this.props;
 
     if (link) {
       return (
         <a
           href={link}
-          className={`text-white py-2 px-4 text-sm rounded-lg mt-[8px] inline-block ${bgColor}`}
+          className={`text-white py-2 px-4 text-xs rounded-lg mt-[8px] inline-block ${bgColor}`}
         >
-          {title}
+          <div className="flex items-center gap-1">
+            {icon} {title}
+          </div>
         </a>
       );
     }
 
     return (
-      <button
-        type={type}
-        onClick={onClick}
-        className={`text-white py-2 px-4 text-sm rounded-lg mt-[8px] w-full ${bgColor}`}
+      <a
+        href={link}
+        className={`text-white py-2 px-4 text-xs rounded-lg mt-[8px] inline-block ${bgColor}`}
       >
-        {title}
-      </button>
+        <div className="flex items-center gap-1">
+          {icon} {title}
+        </div>
+      </a>
     );
   }
 }

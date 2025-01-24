@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_01_24_041244) do
+ActiveRecord::Schema.define(version: 2025_01_24_101715) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,7 +126,6 @@ ActiveRecord::Schema.define(version: 2025_01_24_041244) do
     t.string "name", null: false
     t.string "slug", null: false
     t.text "description"
-    t.decimal "price", precision: 10, scale: 2, null: false
     t.bigint "brand_id", null: false
     t.bigint "category_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -138,6 +137,10 @@ ActiveRecord::Schema.define(version: 2025_01_24_041244) do
     t.string "tex"
     t.float "discount"
     t.integer "tag_number"
+    t.decimal "amount", precision: 10, scale: 2, default: "0.0"
+    t.decimal "sale_amount", precision: 10, scale: 2, default: "0.0"
+    t.decimal "compare_amount", precision: 10, scale: 2, default: "0.0"
+    t.string "currency", default: "USD"
     t.index ["brand_id"], name: "index_products_on_brand_id"
     t.index ["category_id"], name: "index_products_on_category_id"
     t.index ["slug"], name: "index_products_on_slug", unique: true

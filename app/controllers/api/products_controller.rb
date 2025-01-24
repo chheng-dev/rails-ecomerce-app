@@ -3,7 +3,7 @@ class Api::ProductsController < Api::ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
 
   def index
-    products = Product.includes(:category, :brand, :product_images).order(updated_at: :desc).all
+    products = Product.includes(:category, :brand, :product_images)
 
     products = products.where(brand_id: params[:brand_id]) if params[:brand_id].present?
 
@@ -25,6 +25,8 @@ class Api::ProductsController < Api::ApplicationController
     end
 
     products = products.where('products.name ILIKE ?', "%#{params[:product_name]}%") if params[:product_name].present?
+
+    # products.order(updated_at: :desc)
     
     render json: {
       success: true,
@@ -35,7 +37,6 @@ class Api::ProductsController < Api::ApplicationController
           name: product.name,
           slug: product.slug,
           description: product.description,
-          price: product.price,
           category: product.category.name,
           brand: product.brand.name,
           weight: product.weight,
@@ -44,6 +45,10 @@ class Api::ProductsController < Api::ApplicationController
           tag: product.tag,
           tex: product.tex,
           discount: product.discount,
+          price: product.amount,
+          sale_price: product.amount,
+          compare_price: product.compare_amount,
+          currency: product.currency,
           tag_number: product.tag_number,
           stock: product.product_stock ? product.product_stock.stock : 0,
           images: product.product_images.map do |image|
@@ -241,7 +246,12 @@ class Api::ProductsController < Api::ApplicationController
     end
   end
 
+
   private 
+
+  def create_product_prices
+    return unless price
+  end
 
   def set_product
     @product = Product.find(params[:id])
@@ -251,7 +261,6 @@ class Api::ProductsController < Api::ApplicationController
     params.permit(
       :name, 
       :description, 
-      :price, 
       :category_id, 
       :brand_id,
       :weight,
@@ -260,7 +269,11 @@ class Api::ProductsController < Api::ApplicationController
       :tag,
       :tex,
       :discount,
-      :tag_number
+      :tag_number,
+      :amount,
+      :sale_amount,
+      :compare_amount,
+      :currency
     )
   end
 

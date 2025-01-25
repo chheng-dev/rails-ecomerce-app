@@ -1,4 +1,5 @@
 class Api::ApplicationController < ApplicationController
+  before_action :authenticate_user!
 
   def uploaded_image(image)
     uploaded_image = Cloudinary::Uploader.upload(image)

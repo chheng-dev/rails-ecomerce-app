@@ -54,13 +54,13 @@ export default class ProductFilterComp extends React.Component {
   handleQuery(e) {
     e.preventDefault();
 
-    const { productName, selectedBrandId, selectedOptionCategory, dateValue } = this.state;
+    const { productName, selectedBrandId, selectedCategoryId, dateValue } = this.state;
     const { startDate, endDate } = dateValue;
 
     const query = {
       productName: productName,
       selectedBrandId: selectedBrandId,
-      selectedOptionCategory: selectedOptionCategory,
+      selectedCategoryId: selectedCategoryId,
       startDate: startDate,
       endDate: endDate
 
@@ -114,8 +114,8 @@ export default class ProductFilterComp extends React.Component {
 
               <div className="w-1/3">
                 <ProductCategoriesComp
-                  selectedCategoryId={selectedCategoryId}
                   isShowLabel={false}
+                  selectedCategoryId={selectedCategoryId}
                   onChange={(selectedCategoryId) => this.handleChangeCategory(selectedCategoryId)}
                 />
               </div>

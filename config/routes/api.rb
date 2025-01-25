@@ -11,6 +11,7 @@ namespace :api do
     member do 
       get 'option_types', to: 'products#option_types_by_product'
       put 'update_stock'
+      put 'update_published_status'
     end
     
     collection do

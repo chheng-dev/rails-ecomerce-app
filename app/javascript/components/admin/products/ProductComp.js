@@ -171,13 +171,14 @@ export default class ProductComp extends React.Component {
   onCloseDrawer() {
     this.setState({
       isVisibleDrawerUpdateStock: false,
-      stockQuantity: ''
+      stockQuantity: '',
+      selectedRows: null
     });
     this.productRef.current.refResetSelectRowsTableComp();
   }
 
   oncCloseModalDelete() {
-    this.setState({ visible: false });
+    this.setState({ visible: false, selectedRows: null });
     this.productRef.current.refResetSelectRowsTableComp();
   }
 

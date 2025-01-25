@@ -5,6 +5,7 @@ import ModalComp from "../sd/ModalComp";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../loading/LoadingSpinner";
 import { currencyUsd } from "../../../../utils/formatPrice";
+import Switch from "react-switch";
 export default class ProductListComp extends React.Component {
   constructor(props) {
     super(props);
@@ -173,6 +174,30 @@ export default class ProductListComp extends React.Component {
     }
   }
 
+  async handleToggleChange(checked, productId) {
+    this.setState({ loading: true });
+
+    try {
+      await $.ajax({
+        url: `/api/products/${productId}/update_published_status`,
+        method: "PUT",
+        data: { is_published: checked },
+      });
+
+      toast.success("Product status updated successfully.");
+
+      this.getProductsList();
+
+    } catch (error) {
+      console.error("Error updating product:", error);
+
+      toast.error("Error updating product status.");
+    } finally {
+       this.setState({ loading: false });
+    }
+  }
+
+
   render() {
     const columns = [
       { type: "checkbox" },
@@ -214,8 +239,19 @@ export default class ProductListComp extends React.Component {
         render: (row) =>
           row.price ? (
             <div className="flex flex-col items-start gap-2">
-              <p>{row.stock} Item Left</p>
-              <span className="text-xs">155 Sold</span>
+              <p>{row.stock}</p>
+            </div>
+          ) : (
+            0
+          ),
+      },
+      {
+        label: "Status",
+        key: "status",
+        render: (row) =>
+          row.price ? (
+            <div className="flex flex-col items-center gap-2">
+              <p className="bg-green-400 rounded-lg text-white px-1 text-xs">{row.status}</p>
             </div>
           ) : (
             0
@@ -228,6 +264,24 @@ export default class ProductListComp extends React.Component {
       {
         label: 'Brand',
         key: 'brand'
+      },
+      {
+        label: "Published",
+        key: "is_published",
+        render: (row) => (
+          <div className="flex items-center justify-center">
+            <Switch
+              checked={row.is_published}
+              onChange={(checked) => this.handleToggleChange(checked, row.id)}
+              onColor="#49DE80"
+              offColor="#FF6D2F"
+              height={15}
+              width={28}
+              uncheckedIcon={false}
+              checkedIcon={false}
+            />
+          </div>
+        ),
       },
       {
         label: "Action",

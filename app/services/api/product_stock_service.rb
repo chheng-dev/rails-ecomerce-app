@@ -2,7 +2,7 @@ module Api
   class ProductStockService
 
     def initialize(product_ids:, stock_quantity:)
-      @product_ids = product_ids
+      @product_ids = Array(product_ids)
       @stock_quantity = stock_quantity
     end
 
@@ -31,9 +31,9 @@ module Api
         product = Product.find(product_id)
   
         if product.product_stock
-          product.product_stock.update(stock: stock_quantity)
+          product.product_stock.update(stock: @stock_quantity)
         else
-          product.create_product_stock(stock: stock_quantity)
+          product.create_product_stock(stock: @stock_quantity)
         end
       end
     end

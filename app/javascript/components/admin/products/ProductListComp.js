@@ -54,8 +54,13 @@ export default class ProductListComp extends React.Component {
     query = query.slice(0, -1);
 
     $.ajax({
-      url: `/api/products?${query}`,
       method: 'GET',
+      url: `/api/products?${query}`,
+      dataType: 'json',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+        'Content-Type': 'application/json'
+      },
       success: (response) => {
         if (response.success) {
           this.setState({
@@ -79,7 +84,7 @@ export default class ProductListComp extends React.Component {
           error: 'Failed to fetch products. Please try again later.'
         });
       }
-    })
+    });
   };
 
   handleActionClick = (row, actionType) => {
@@ -178,25 +183,36 @@ export default class ProductListComp extends React.Component {
     this.setState({ loading: true });
 
     try {
-      await $.ajax({
-        url: `/api/products/${productId}/update_published_status`,
+      const response = await fetch(`/api/products/${productId}/update_published_status`, {
         method: "PUT",
-        data: { is_published: checked },
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ is_published: checked }),
       });
 
-      toast.success("Product status updated successfully.");
+      if (response.status === 401) {
+        toast.error("Session expired. Please sign in again.");
+        localStorage.clear();
+        window.location.href = "/users/sign_in";
+        return;
+      }
 
+      if (!response.ok) {
+        throw new Error("Failed to update product status");
+      }
+
+      toast.success("Product status updated successfully.");
       this.getProductsList();
 
     } catch (error) {
       console.error("Error updating product:", error);
-
       toast.error("Error updating product status.");
     } finally {
-       this.setState({ loading: false });
+      this.setState({ loading: false });
     }
   }
-
 
   render() {
     const columns = [

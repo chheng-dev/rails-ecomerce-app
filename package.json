@@ -16,6 +16,7 @@
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "jquery": "^3.7.1",
+    "jwt-decode": "^4.0.0",
     "less": "^4.2.1",
     "less-loader": "^12.2.0",
     "lottie-react": "^2.4.0",

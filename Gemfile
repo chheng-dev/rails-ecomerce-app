@@ -39,6 +39,10 @@ gem 'bcrypt', '~> 3.1.7'
 
 # Authentication
 gem 'devise'
+gem 'devise-jwt'
+# gem "devise_token_auth", "~> 1.2"
+gem 'jwt'
+# gem 'omniauth', '>= 1.0.0'
 
 gem "tailwindcss-rails"
 

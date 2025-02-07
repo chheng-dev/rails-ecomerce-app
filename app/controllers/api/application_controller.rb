@@ -1,5 +1,4 @@
 class Api::ApplicationController < ApplicationController
-  before_action :authenticate_user!
 
   def uploaded_image(image)
     uploaded_image = Cloudinary::Uploader.upload(image)
@@ -24,5 +23,4 @@ class Api::ApplicationController < ApplicationController
       Rails.logger.error "Cloudinary image delete failed: #{e.message}"
     end
   end
-  
 end

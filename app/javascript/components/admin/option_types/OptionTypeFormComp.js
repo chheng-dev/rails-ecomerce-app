@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingSpinner from "../loading/LoadingSpinner";
 import TextFieldComp from "../sd/form/TextFieldComp";
-import { Trash2Icon, XIcon } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
 
 
 class OptionTypeFormComp extends React.Component {
@@ -34,12 +34,6 @@ class OptionTypeFormComp extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
     this.addOptionValue = this.addOptionValue.bind(this);
-
-    console.log("optionType", this.state.optionType)
-  }
-
-  componentDidMount() {
-
   }
 
   handleInputChange = (event) => {
@@ -116,7 +110,9 @@ class OptionTypeFormComp extends React.Component {
           });
         }
 
-        window.location.href = `/admin/option_types/${response.option_type.id}/option_values/new`;
+        if (!this.props.isEditMode) {
+          window.location.href = `/admin/option_types/${response.option_type.id}/option_values/new`;
+        }
       },
       error: (xhr, status, error) => {
         console.error('Error processing option type:', error);

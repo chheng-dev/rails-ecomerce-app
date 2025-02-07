@@ -26,6 +26,10 @@ export default class ProductBrandsComp extends React.Component {
       method: 'GET',
       url: '/api/brands',
       dataType: 'json',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+        'Content-Type': 'application/json'
+      },
       success: (data) => {
         const result = this.renderBrandsOptions(data.brands);
         this.setState({

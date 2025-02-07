@@ -24,6 +24,10 @@ export default class ProductCategoriesComp extends React.Component {
       method: 'GET',
       url: '/api/categories',
       dataType: 'json',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+        'Content-Type': 'application/json'
+      },
       success: (data) => {
         const result = this.renderCategoriesOptions(data);
         this.setState({

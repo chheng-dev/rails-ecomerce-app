@@ -91,29 +91,42 @@ class CategoryForm extends React.Component {
       formData.append("avatar", avatar);
     }
 
-    try {
-      if (this.props.isEditMode) {
-        const { id } = this.props.category
-        await CategoryService.updateCategory(id, formData);
-        toast.success("Category updated successfully!");
-      } else {
-        await CategoryService.createCategory(formData);
-        toast.success("Category created successfully!");
+    const url = this.props.isEditMode
+      ? `/api/categories/${this.props.category.id}`
+      : "/api/categories";
 
-        this.setState({
-          categoryName: "",
-          description: "",
-          selectedOptionColor: null,
-          avatar: null,
-          previewImage: "",
-        });
-      }
-    } catch (error) {
-      console.error("Error processing category:", error);
-      toast.error(this.props.isEditMode ? "Failed to update category. Please try again." : "Failed to create category. Please try again.");
-    } finally {
-      this.setState({ loading: false });
-    }
+    const method = this.props.isEditMode ? "PUT" : "POST";
+
+    $.ajax({
+      url: url,
+      method: method,
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: (response) => {
+        toast.success(response.message);
+        if (!this.props.isEditMode) {
+          this.setState({
+            categoryName: "",
+            description: "",
+            selectedOptionColor: null,
+            avatar: null,
+            previewImage: "",
+          });
+        }
+      },
+      error: (xhr, status, error) => {
+        console.error("Error processing category:", error);
+        toast.error(
+          this.props.isEditMode
+            ? "Failed to update category. Please try again."
+            : "Failed to create category. Please try again."
+        );
+      },
+      complete: () => {
+        this.setState({ loading: false });
+      },
+    });
   };
 
   render() {

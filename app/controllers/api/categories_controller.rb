@@ -1,5 +1,5 @@
-class Api::CategoriesController < Api::ApplicationController
-  skip_before_action :verify_authenticity_token
+class Api::CategoriesController < Api::BaseController
+  skip_before_action :verify_authenticity_token, only: [:create, :destroy]
   before_action :set_category, only: [:destroy]
 
   def index
@@ -31,16 +31,23 @@ class Api::CategoriesController < Api::ApplicationController
           category_color = JSON.parse(params[:category_color]) rescue nil
         end
   
-        @category = Category.new(category_params.merge(avatar: avatar_url))
+        category = Category.new(category_params.merge(avatar: avatar_url))
   
-        if @category.save
+        if category.save
           if category_color
-            @category.create_category_color!(name: category_color['name'], code: category_color['code'])
+            category.create_category_color!(name: category_color['name'], code: category_color['code'])
           end
   
-          render json: @category, status: :created
+          render json: {
+            success: true,
+            message: 'Category created successfully!',
+            category: category
+          }, status: :created
         else
-          render json: @category.errors, status: :unprocessable_entity
+          render json: {
+            success: false,
+            message: category.errors
+          }, status: :unprocessable_entity
         end
       rescue Cloudinary::Api::Error => e
         render json: { error: e.message }, status: :unprocessable_entity
@@ -75,9 +82,16 @@ class Api::CategoriesController < Api::ApplicationController
             @catgory.create_category_color!(name: category_color['name'], code: category_color['code'])
           end
 
-          render json: category, status: :ok
+          render json: {
+            success: true,
+            message: 'Category updated successfully!',
+            category: category
+          }, status: :ok
         else
-          render json: category.errors, status: :unprocessable_entity
+          render json: {
+            success: false,
+            message: category.errors
+          }, status: :unprocessable_entity
         end
       rescue Cloudinary::Api::Error => e
         render json: {error: e.message}, status: :unprocessable_entity
@@ -95,6 +109,12 @@ class Api::CategoriesController < Api::ApplicationController
     @category = Category.find_by(id: params[:id])
 
     if @category
+        if @category.products.exists? 
+          
+          render json: { message: 'Cannot delete category with associated products' }, status: :unprocessable_entity
+        return
+      end
+
       if @category.avatar.present?
         public_id = @category.avatar.split('/').last.split('.').first
         Cloudinary::Uploader.destroy(public_id)
@@ -112,10 +132,6 @@ class Api::CategoriesController < Api::ApplicationController
   def category_params
     params.permit(:name, :description, :avatar)
   end
-
-  # def category_color_params
-  #   params.require(:category_color).permit(:name, :code)
-  # end
 
   def set_category
     @category = Category.includes(:category_color).find(params[:id])

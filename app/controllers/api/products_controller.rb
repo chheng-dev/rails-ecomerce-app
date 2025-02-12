@@ -1,6 +1,7 @@
-class Api::ProductsController < Api::ApplicationController
-  skip_before_action :verify_authenticity_token
+class Api::ProductsController < Api::BaseController
+  skip_before_action :verify_authenticity_token, only: [:create, :destroy] 
   before_action :set_product, only: [:show, :edit, :update, :destroy]
+  protect_from_forgery with: :null_session, if: -> { request.format.json? }
 
   def index
     products = Api::ProductSearchService.new(params).call
@@ -126,7 +127,9 @@ class Api::ProductsController < Api::ApplicationController
     stock_quantity = params[:stock].to_i
 
     if stock_quantity >= 0
-      ProductStockService.update_stock(product.id, stock_quantity).call
+      service = Api::ProductStockService.new(product_ids: product.id, stock_quantity: stock_quantity)
+      service.call
+
       render json: {
         success: true,
         message: 'Product stock updated successfully.',
@@ -145,12 +148,13 @@ class Api::ProductsController < Api::ApplicationController
   end
 
   def update_multiple_stocks
-    product_ids = params[:product_id]
+    product_ids = params[:product_ids]
     stock_quantity = params[:stock].to_i
 
     if product_ids.present? && stock_quantity.present?
       begin
-        Api::ProductStockService.update_multiple_stocks(product_ids, stock_quantity).call
+        service = Api::ProductStockService.new(product_ids: product_ids, stock_quantity: stock_quantity)
+        service.call
 
         render json: {
           success: true,

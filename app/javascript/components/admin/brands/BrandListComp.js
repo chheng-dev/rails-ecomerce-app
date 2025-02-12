@@ -4,6 +4,7 @@ import { Edit3Icon, Trash2Icon } from "lucide-react";
 import ModalComp from "../sd/ModalComp";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../loading/LoadingSpinner";
+import { fetchWithToken } from "../../../../assets/javascripts/admin/api";
 
 export default class BrandListComp extends React.Component {
   constructor(props) {
@@ -25,21 +26,25 @@ export default class BrandListComp extends React.Component {
 
   async getBrandsList() {
     this.setState({ loading: true });
-    $.ajax({
-      method: 'GET',
-      url: this.props.apibrandsUrl,
-      dataType: 'json',
-      success: (data) => {
+
+    try {
+      const response = await fetchWithToken(this.props.apibrandsUrl, { method: 'GET' });
+
+      const data = await response.json();
+      if (response.ok) {
         this.setState({
           brands: data.brands,
           loading: false
-        })
-      },
-      error: (xhr, status, error) => {
+        });
+      } else {
+        console.error('Error fetching brands:', data);
         this.setState({ loading: false });
       }
-    })
-  };
+    } catch (error) {
+      console.error('Request failed:', error);
+      this.setState({ loading: false });
+    }
+  }
 
   handleActionClick = (row, actionType) => {
     console.log(`Action: ${actionType} clicked for row:`, row);

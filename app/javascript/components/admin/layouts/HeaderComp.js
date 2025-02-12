@@ -20,16 +20,21 @@ export default class HeaderComp extends React.Component {
   handleSignOut() {
     $.ajax({
       type: "DELETE",
-      url: this.state.logoutUrl,
+      url: "/api/logout",
       data: {},
-      success: (respone) => {
-        console.log('Signed out successfully:', respone);
-        window.location.href = '/'
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+      },
+      success: (response) => {
+        console.log('Signed out successfully:', response);
+        window.location.href = '/users/sign_in';
+        localStorage.clear('authToken');
+        localStorage.clear('refreshToken');
       },
       error: (error) => {
         console.error('Error signing out:', error);
       }
-    })
+    });
   }
 
   render() {

@@ -25,15 +25,29 @@ export default class CategoryList extends React.Component {
   }
 
   async getCategories() {
-    try {
-      this.setState({ loading: true });
-      const categories = await CategoryService.getCategories();
-      this.setState({ categories, loading: false });
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-      this.setState({ loading: false });
-    }
+    this.setState({ loading: true });
+    $.ajax({
+      method: 'GET',
+      url: "/api/categories",
+      dataType: 'json',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+        'Content-Type': 'application/json'
+      },
+      success: (data) => {
+        this.setState({
+          categories: data,
+          loading: false
+        })
+      },
+      error: (xhr, status, error) => {
+        this.setState({ loading: false });
+      }
+    });
+    this.setState({ loading: false });
+
   };
+
 
   handleActionClick = (row, actionType) => {
     console.log(`Action: ${actionType} clicked for row:`, row);

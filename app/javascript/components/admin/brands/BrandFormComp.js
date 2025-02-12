@@ -96,7 +96,7 @@ class BrandFormComp extends React.Component {
         console.error('Error processing brand:', brand);
         toast.error(
           this.props.isEditMode
-            ? "Failed to update category. Please try again."
+            ? "Failed to update brand. Please try again."
             : "Failed to create brand. Please try again."
         );
       },

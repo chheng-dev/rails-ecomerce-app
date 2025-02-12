@@ -1,4 +1,4 @@
-class Api::OptionTypesController < Api::ApplicationController
+class Api::OptionTypesController < Api::BaseController
   skip_before_action :verify_authenticity_token
   before_action :set_option_type, only: [:show, :update, :destroy]
 

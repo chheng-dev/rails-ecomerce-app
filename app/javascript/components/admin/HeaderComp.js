@@ -12,7 +12,6 @@ export default class HeaderComp extends React.Component {
 
   render() {
     const { link, title, list_title, selectedRows, icon } = this.props;
-    console.log('selectedRows', selectedRows);
     return (
       <Fragment>
         <div className="flex justify-between items-center px-4 py-2">

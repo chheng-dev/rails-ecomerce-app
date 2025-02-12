@@ -2,6 +2,7 @@ class Category < ApplicationRecord
   # has_one_attached :avatar
 
   has_one :category_color, dependent: :destroy
+  has_many :products, dependent: :restrict_with_error
   accepts_nested_attributes_for :category_color
 
   validates :name, presence: true

@@ -122,47 +122,47 @@ export default class ProductComp extends React.Component {
     e.preventDefault();
     this.setState({ loading: true });
 
-    const { products, selectedRows } = this.state;
-
-    const productsInfo = products?.filter(product => selectedRows?.includes(product.id));
-
-    const { stockQuantity } = this.state;
+    const { products, selectedRows, stockQuantity } = this.state;
 
     if (!stockQuantity) {
-      toast.error("Please fill the stock quantity!");
+      toast.error("Please fill in the stock quantity!");
       this.setState({ loading: false });
       return;
     }
 
-    const formData = new FormData();
-    formData.append("stock", stockQuantity);
+    const productsInfo = products?.filter(product => selectedRows?.includes(product.id));
 
-    if (productsInfo && productsInfo.length > 0) {
-      productsInfo.forEach((product) => {
-        formData.append('product_id[]', product.id);
-      });
-    } else {
+    if (!productsInfo || productsInfo.length === 0) {
       toast.error("No products selected for update.");
       this.setState({ loading: false });
       return;
     }
 
+    const requestData = {
+      stock: stockQuantity,
+      product_ids: productsInfo.map(product => product.id)
+    };
+
     try {
-      await $.ajax({
-        url: '/api/products/update_multiple_stocks',
+      const response = await fetch('/api/products/update_multiple_stocks', {
         method: 'PUT',
-        data: formData,
-        contentType: false,
-        processData: false
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify(requestData)
       });
 
-      toast.success("Product updated successfully!");
+      if (!response.ok) {
+        throw new Error("Failed to update product stock.");
+      }
+
+      toast.success("Products updated successfully!");
       this.setProductQuery({});
       this.onCloseDrawer();
-
     } catch (error) {
-      console.error('Error processing product:', error);
-      toast.error("Failed to update product. Please try again.");
+      console.error('Error processing product update:', error);
+      toast.error("Failed to update products. Please try again.");
     } finally {
       this.setState({ loading: false });
     }

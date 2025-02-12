@@ -1,5 +1,5 @@
-class Api::BrandsController < Api::ApplicationController
-  skip_before_action :verify_authenticity_token
+class Api::BrandsController < Api::BaseController
+  skip_before_action :verify_authenticity_token, only: [:create, :destroy]
   before_action :set_brand, only: [:edit, :update, :destroy]
 
   def index 

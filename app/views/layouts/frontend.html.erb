@@ -7,16 +7,18 @@
   <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
   <%= stylesheet_link_tag 'frontend', media: 'all' %>
   <%= javascript_include_tag 'frontend' %>
+  <%= javascript_pack_tag 'frontend', 'data-turbolinks-track': 'reload'  %>
 </head>
 <body>
   <header>
-    <h1>Frontend Header</h1>
+    <%= render 'layouts/frontend/navbar' %>
+    <%= render 'layouts/frontend/menu_items' %>
   </header>
   <main>
     <%= yield %>
   </main>
   <footer>
-    <p>Frontend Footer</p>
+    <p class="text-red-500">Frontend Footer</p>
   </footer>
 </body>
 </html>

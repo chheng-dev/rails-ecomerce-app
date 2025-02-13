@@ -1,0 +1,81 @@
+@import "./variables.scss";
+@import "./overrides.scss";
+@import "./homepage/header/category-dropdown.scss";
+@import "./homepage//header/language-dropdown.scss";
+
+body {
+  font-family: $font-primary !important;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.site-navbar {
+  background-color: $primary;
+  color: white;
+}
+
+.title-logo {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+input::placeholder {
+  // opacity: 0.5;
+  color: #9096A6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: $font-primary !important;
+}
+
+.nav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #e7e7e7;
+  background-color: #f3f3f3;
+  color: #666;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: #666;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: $primary;
+  color: white;
+  text-decoration: underline;
+}
+
+li a.active {
+  // color: white;
+  // background-color: #04AA6D;
+}
+
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}

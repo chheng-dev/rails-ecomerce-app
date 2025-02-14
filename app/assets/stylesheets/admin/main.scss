@@ -1,46 +1,51 @@
 @import "./variables.scss";
 
-body{
+body {
   font-family: $font-primary !important;
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
+
 .active {
   color: white;
   font-weight: 400;
   border-left: 2px solid $primary;
   transition: all 0.5s;
-  svg{
+
+  svg {
     color: $primary;
   }
 }
 
 :root {
-  --antd-wave-shadow-color: #1DA57A; 
+  --antd-wave-shadow-color: #1DA57A;
 }
 
 .ant-btn-primary {
   background-color: $primary;
   border-color: $primary;
-  &:hover{
+
+  &:hover {
     background-color: $primary !important;
     transition: 0.5s;
   }
 }
 
-p{
+p {
   margin: 0 !important;
 }
 
 @keyframes spin {
-  0%{
+  0% {
     transform: rotate(0deg);
   }
-  100%{
+
+  100% {
     transform: rotate(360deg);
   }
 }
+
 /* Dropdown button styling */
 // .dropdown {
 //   position: relative;
@@ -121,7 +126,8 @@ p{
   height: 40px;
   padding: 0;
   position: relative;
-  outline: none; /* Remove outline on focus */
+  outline: none;
+  /* Remove outline on focus */
 }
 
 /* Icon styling */
@@ -132,7 +138,8 @@ p{
   transform: translate(-50%, -50%);
   width: 20px;
   height: 20px;
-  color: #9ca3af; /* gray-400 */
+  color: #9ca3af;
+  /* gray-400 */
 }
 
 /* Dropdown content styling */
@@ -143,21 +150,30 @@ p{
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 8px;
-  top: 120%; /* Adjust dropdown position */
+  top: 120%;
+  /* Adjust dropdown position */
   left: 50%;
   transform: translateX(-50%);
-  opacity: 0; /* Initially hidden */
-  visibility: hidden; /* Initially hidden */
-  transition: opacity 0.3s ease, visibility 0s 0.3s, transform 0.3s ease; /* Smooth transitions */
-  transform: translateY(10px); /* Slightly shifted for a smooth entry */
+  opacity: 0;
+  /* Initially hidden */
+  visibility: hidden;
+  /* Initially hidden */
+  transition: opacity 0.3s ease, visibility 0s 0.3s, transform 0.3s ease;
+  /* Smooth transitions */
+  transform: translateY(10px);
+  /* Slightly shifted for a smooth entry */
 }
 
 /* Show dropdown when button is focused */
 .dropdown:focus-within .dropdown-content {
-  opacity: 1; /* Fade in */
-  visibility: visible; /* Make the dropdown content visible */
-  transform: translateY(0); /* Slide into position */
-  transition: opacity 0.3s ease, visibility 0s 0s, transform 0.3s ease; /* Ensures immediate transition when focus ends */
+  opacity: 1;
+  /* Fade in */
+  visibility: visible;
+  /* Make the dropdown content visible */
+  transform: translateY(0);
+  /* Slide into position */
+  transition: opacity 0.3s ease, visibility 0s 0s, transform 0.3s ease;
+  /* Ensures immediate transition when focus ends */
 }
 
 /* Dropdown links styling */
@@ -178,42 +194,47 @@ p{
   filter: brightness(0) saturate(100%) invert(52%) sepia(42%) saturate(3385%) hue-rotate(340deg) brightness(103%) contrast(101%);
 }
 
-.filter-gray{
+.filter-gray {
   filter: brightness(0) saturate(100%) invert(64%) sepia(7%) saturate(574%) hue-rotate(186deg) brightness(92%) contrast(89%);
 }
 
-.filter-white{
+.filter-white {
   filter: brightness(0) saturate(100%) invert(99%) sepia(0%) saturate(3143%) hue-rotate(167deg) brightness(116%) contrast(74%);
 }
 
 #categoryDropdownMenu {
   display: none;
-  height: 0; 
-  opacity: 0; 
-  overflow: hidden; 
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
 }
 
 #categoryDropdownMenu.open {
   display: block;
-  height: auto; 
-  opacity: 1; 
+  height: auto;
+  opacity: 1;
   transition-duration: 4s;
   transition-delay: 2s;
 }
 
-select:focus{
+select:focus {
   outline: none !important;
 }
 
-#svgIcon:hover{
+#svgIcon:hover {
   filter: brightness(0) saturate(100%) invert(52%) sepia(42%) saturate(3385%) hue-rotate(340deg) brightness(103%) contrast(101%);
 }
 
-h1,h2,h3,h4,h5,h6{
-  font-family: $font-seconday !important;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-secondary !important;
 }
 
-.prefixIconClass{
+.prefixIconClass {
   padding: 12px;
   left: 0;
   top: 1px;
@@ -221,16 +242,19 @@ h1,h2,h3,h4,h5,h6{
   // z-index: 99999;
 }
 
-.css-1p3m7a8-multiValue{
+.css-1p3m7a8-multiValue {
   background-color: $primary !important;
   color: white;
-  .css-1npzcee{
+
+  .css-1npzcee {
     color: white;
   }
 }
 
-.datePicker{
-  font-family: $font-seconday !important;
+.datePicker {
+  font-family: $font-secondary !important;
 }
 
-.remove-input-txt-border input[type='text']:focus {   box-shadow: none; }
+.remove-input-txt-border input[type='text']:focus {
+  box-shadow: none;
+}

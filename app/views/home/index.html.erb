@@ -1,2 +1,38 @@
+<div class="container mx-auto py-3">
+  <div class="grid grid-cols-6 grid-rows-2 gap-2">
+    <!-- Left content, spans 1 column and 3 rows, with fixed height -->
+    <div class="col-span-4 row-span-3 h-[450px]">
+      <%= react_component("frontend/home/LeftSlideShowBannerComp") %>
+    </div>
 
-<h1>Home page</h1>
+    <!-- Right content - First item, spans 2 columns and 1 row -->
+    <div class="col-span-2">
+      <div class="slide-item">
+        <div class="image-overlay relative">
+          <img src="https://as1.ftcdn.net/v2/jpg/07/95/01/84/1000_F_795018435_5nkOllwtJP9xDYxoIlYq8AwF2NwKmgea.jpg" alt="Slide" class="rounded-md object-cover w-full h-full" />
+          <div class="overlay absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
+          <div class="slide-text absolute bottom-4 left-4">
+            <button type="button" class="mt-4 px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none">
+              Show Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right content - Second item, spans 2 columns and 1 row -->
+    <div class="col-span-2">
+      <div class="slide-item">
+        <div class="image-overlay relative">
+          <img src="https://as1.ftcdn.net/v2/jpg/07/95/01/84/1000_F_795018435_5nkOllwtJP9xDYxoIlYq8AwF2NwKmgea.jpg" alt="Slide" class="rounded-md object-cover w-full h-full" />
+          <div class="overlay absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
+          <div class="slide-text absolute bottom-4 left-4">
+            <button type="button" class="mt-4 px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none">
+              Show Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
